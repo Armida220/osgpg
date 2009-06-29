@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PointCloudProcess", "PointCloudProcess\PointCloudProcess.vcproj", "{974E2080-9A5A-4BFA-B217-92418CFC2EFB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DllTest", "DllTest\DllTest.vcproj", "{11261F34-2D52-4C04-9F42-15B996DB616F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{974E2080-9A5A-4BFA-B217-92418CFC2EFB} = {974E2080-9A5A-4BFA-B217-92418CFC2EFB}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFCTest", "MFCTest\MFCTest.vcproj", "{9AA37394-7F0D-418E-A59B-568751176133}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DDEF8A38-B349-424E-9897-AF34542B6CCC} = {DDEF8A38-B349-424E-9897-AF34542B6CCC}
+		{974E2080-9A5A-4BFA-B217-92418CFC2EFB} = {974E2080-9A5A-4BFA-B217-92418CFC2EFB}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osgViewerFramework", "osgViewerFramework\osgViewerFramework.vcproj", "{DDEF8A38-B349-424E-9897-AF34542B6CCC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xyz2ive", "xyz2ive\xyz2ive.vcproj", "{22C87C84-7EF5-44AA-BEB9-FA1F16FAE7F6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{974E2080-9A5A-4BFA-B217-92418CFC2EFB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{974E2080-9A5A-4BFA-B217-92418CFC2EFB}.Debug|Win32.Build.0 = Debug|Win32
+		{974E2080-9A5A-4BFA-B217-92418CFC2EFB}.Release|Win32.ActiveCfg = Release|Win32
+		{974E2080-9A5A-4BFA-B217-92418CFC2EFB}.Release|Win32.Build.0 = Release|Win32
+		{11261F34-2D52-4C04-9F42-15B996DB616F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{11261F34-2D52-4C04-9F42-15B996DB616F}.Debug|Win32.Build.0 = Debug|Win32
+		{11261F34-2D52-4C04-9F42-15B996DB616F}.Release|Win32.ActiveCfg = Release|Win32
+		{11261F34-2D52-4C04-9F42-15B996DB616F}.Release|Win32.Build.0 = Release|Win32
+		{9AA37394-7F0D-418E-A59B-568751176133}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9AA37394-7F0D-418E-A59B-568751176133}.Debug|Win32.Build.0 = Debug|Win32
+		{9AA37394-7F0D-418E-A59B-568751176133}.Release|Win32.ActiveCfg = Release|Win32
+		{9AA37394-7F0D-418E-A59B-568751176133}.Release|Win32.Build.0 = Release|Win32
+		{DDEF8A38-B349-424E-9897-AF34542B6CCC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DDEF8A38-B349-424E-9897-AF34542B6CCC}.Debug|Win32.Build.0 = Debug|Win32
+		{DDEF8A38-B349-424E-9897-AF34542B6CCC}.Release|Win32.ActiveCfg = Release|Win32
+		{DDEF8A38-B349-424E-9897-AF34542B6CCC}.Release|Win32.Build.0 = Release|Win32
+		{22C87C84-7EF5-44AA-BEB9-FA1F16FAE7F6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{22C87C84-7EF5-44AA-BEB9-FA1F16FAE7F6}.Debug|Win32.Build.0 = Debug|Win32
+		{22C87C84-7EF5-44AA-BEB9-FA1F16FAE7F6}.Release|Win32.ActiveCfg = Release|Win32
+		{22C87C84-7EF5-44AA-BEB9-FA1F16FAE7F6}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
