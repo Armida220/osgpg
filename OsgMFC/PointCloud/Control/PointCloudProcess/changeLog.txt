@@ -1,0 +1,2 @@
+2009-06-18
+   添加Points2KdTreeGrids.lib库，支持将读入点云进行kdTreeLod划分

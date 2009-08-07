@@ -1,0 +1,239 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG_OPEN DIALOGEX 0, 0, 245, 164
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "打开点云/三角网文件"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,64,143,50,14
+    PUSHBUTTON      "取消",IDCANCEL,129,143,50,14
+    GROUPBOX        "点云",IDC_STATIC,6,58,108,78
+    GROUPBOX        "三角网",IDC_STATIC,129,58,109,78
+    CONTROL         "无",IDC_RADIO_POINTCLOUD_NONE,"Button",BS_AUTORADIOBUTTON,10,72,24,10
+    CONTROL         "原始点云数据",IDC_RADIO_POINTCLOUD_RAW,"Button",BS_AUTORADIOBUTTON,10,89,64,10
+    CONTROL         "原始点云数据+LOD分割",IDC_RADIO_POINTCLOUD_KD,"Button",BS_AUTORADIOBUTTON,10,106,99,10
+    CONTROL         "OSG格式点云",IDC_RADIO_POINTCLOUD_OSG,"Button",BS_AUTORADIOBUTTON,10,123,62,10
+    CONTROL         "无",IDC_RADIO_TRIANGLE_NONE,"Button",BS_AUTORADIOBUTTON | WS_GROUP,136,72,24,10
+    CONTROL         "原始点云数据",IDC_RADIO_TRIANGLE_RAW,"Button",BS_AUTORADIOBUTTON,136,89,64,10
+    CONTROL         "PLY格式原始点云数据",IDC_RADIO_TRIANGLE_PLY,"Button",BS_AUTORADIOBUTTON,136,106,91,10
+    CONTROL         "OSG格式三角网",IDC_RADIO_TRIANGLE_OSG,"Button",BS_AUTORADIOBUTTON,136,123,70,10
+    EDITTEXT        IDC_EDIT_FILENAME,6,28,204,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BUTTON_OPEN,213,28,25,14
+    LTEXT           "文件路径",IDC_STATIC,6,15,33,8
+END
+
+IDD_DIALOG_VIEWMODE DIALOGEX 0, 0, 167, 28
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "观察模式"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "观察",IDC_BUTTON_VIEW,57,7,50,14
+END
+
+IDD_DIALOG_LABLE_POINT DIALOGEX 0, 0, 258, 28
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "标记点模式"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "标记点",IDC_BUTTON_LABLE_POINT,7,7,50,14
+    PUSHBUTTON      "+",IDC_BUTTON_LABLE_ADD,179,7,30,14
+    PUSHBUTTON      "—",IDC_BUTTON_LABLE_MINUS,221,7,30,14
+    LTEXT           "标记点号：",IDC_STATIC,75,10,41,8
+    EDITTEXT        IDC_EDIT_LABLE_ID,123,7,40,14,ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER
+END
+
+IDD_DIALOG_PICK_POINTCLOUD DIALOGEX 0, 0, 173, 49
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "选择点云模式"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "选择点云",IDC_BUTTON_PICK_POINTCLOUD,7,7,50,14
+    PUSHBUTTON      "选中三角网面积",IDC_BUTTON_TRIAREA,91,7,75,14
+    EDITTEXT        IDC_EDIT_TRIANGLE_AREA,47,28,119,14,ES_AUTOHSCROLL
+    LTEXT           "面积：",IDC_STATIC,16,34,25,8
+END
+
+IDD_DIALOG_PICK_TRIANGLE DIALOGEX 0, 0, 203, 89
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "选择三角形模式"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "选择三角形",IDC_BUTTON_PICK_TRIANGLE,7,7,50,14
+    LTEXT           "点A",IDC_STATIC,7,31,14,8
+    EDITTEXT        IDC_EDIT_AX,45,26,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_AY,101,26,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_AZ,156,26,40,14,ES_AUTOHSCROLL
+    LTEXT           "点B",IDC_STATIC,7,52,13,8
+    EDITTEXT        IDC_EDIT_BX,45,47,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_BY,101,47,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_BZ,156,47,40,14,ES_AUTOHSCROLL
+    LTEXT           "点C",IDC_STATIC,7,73,14,8
+    EDITTEXT        IDC_EDIT_CX,45,68,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_CY,101,68,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_CZ,156,68,40,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "当前三角形坐标",IDC_BUTTON_CUR_TRIANGLE,133,7,63,14
+END
+
+IDD_DIALOG_DRAG DIALOGEX 0, 0, 191, 26
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "拖拽模式"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "拖拽",IDC_BUTTON_DRAG,7,6,50,14
+    PUSHBUTTON      "撤消",IDC_BUTTON_UNDO,117,6,30,14
+    PUSHBUTTON      "重做",IDC_BUTTON_REDO,154,6,30,14
+END
+
+IDD_DIALOG_DRAGVERTEX DIALOGEX 0, 0, 186, 28
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "拖拽顶点模式"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "拖拽顶点",IDC_BUTTON_DRAGVERTEX,67,7,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_DIALOG_OPEN, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 238
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 157
+    END
+
+    IDD_DIALOG_VIEWMODE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 160
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 21
+    END
+
+    IDD_DIALOG_LABLE_POINT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 251
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 21
+    END
+
+    IDD_DIALOG_PICK_POINTCLOUD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 166
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 42
+    END
+
+    IDD_DIALOG_PICK_TRIANGLE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 196
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 82
+    END
+
+    IDD_DIALOG_DRAG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 184
+        TOPMARGIN, 6
+        BOTTOMMARGIN, 19
+    END
+
+    IDD_DIALOG_DRAGVERTEX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 21
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_APP_TITLE           "PointCloudProcessor"
+END
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

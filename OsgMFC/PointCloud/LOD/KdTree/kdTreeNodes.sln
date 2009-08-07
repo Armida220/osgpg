@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kdTreeNodes", "kdTreeNodes\kdTreeNodes.vcproj", "{562F58AC-DB1F-4EBC-B95E-1FE1FD5108A6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Points2KdTreeGrids", "Points2KdTreeGrids\Points2KdTreeGrids.vcproj", "{505E69BA-709D-45CD-BEF8-76706F30A582}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{562F58AC-DB1F-4EBC-B95E-1FE1FD5108A6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{562F58AC-DB1F-4EBC-B95E-1FE1FD5108A6}.Debug|Win32.Build.0 = Debug|Win32
+		{562F58AC-DB1F-4EBC-B95E-1FE1FD5108A6}.Release|Win32.ActiveCfg = Release|Win32
+		{562F58AC-DB1F-4EBC-B95E-1FE1FD5108A6}.Release|Win32.Build.0 = Release|Win32
+		{505E69BA-709D-45CD-BEF8-76706F30A582}.Debug|Win32.ActiveCfg = Debug|Win32
+		{505E69BA-709D-45CD-BEF8-76706F30A582}.Debug|Win32.Build.0 = Debug|Win32
+		{505E69BA-709D-45CD-BEF8-76706F30A582}.Release|Win32.ActiveCfg = Release|Win32
+		{505E69BA-709D-45CD-BEF8-76706F30A582}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
