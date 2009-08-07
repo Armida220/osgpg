@@ -129,6 +129,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="2"
 				AdditionalIncludeDirectories="&quot;$(OSGHOME)/include&quot;;..\OsgMFC"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
@@ -155,7 +156,7 @@
 				AdditionalDependencies="osgManipulator.lib OpenThreads.lib osg.lib osgDB.lib osgGA.lib osgUtil.lib osgViewer.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(OSGHOME)/lib&quot;;"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -295,6 +296,10 @@
 			>
 			<File
 				RelativePath=".\ChildFrm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ControllerPluginBase.h"
 				>
 			</File>
 			<File

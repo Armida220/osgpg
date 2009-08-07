@@ -4,46 +4,39 @@
 namespace FC {
 	PluginManager::PluginManager(void)
 	{
+		_workFlowPlugin.pObj = 0;
+		_workFlowPlugin.hIns = 0;
 	}
 
 	PluginManager::~PluginManager(void)
 	{
-		while(!_pluginList.empty()) {
-			this->UnLoadPlugin(_pluginList.begin());
+		this->UnLoadWorkFlowPlugin();
+		
+		while(!_ctrlMap.empty()) {
+			UnLoadControllerPlugin(_ctrlMap.begin());
 		}
-		_pluginList.clear();
 	}
 
-	void PluginManager::UnLoadPlugin(PluginList::iterator itr)
+	void PluginManager::UnLoadWorkFlowPlugin()
 	{
-		PLUG_ST& plugin = *itr;
+		WorkFlowPLUG_ST& plugin = this->_workFlowPlugin;
 		if(plugin.pObj) {
 			plugin.pObj->Release();
 			plugin.pObj = 0;
 
 			if(plugin.hIns)
 				FreeLibrary(plugin.hIns);
-
-			_pluginList.erase(itr);
 		}
 	}
 
-	WorkFlowPluginBase* PluginManager::GetWorkFlow(unsigned int i)
+	WorkFlowPluginBase* PluginManager::GetWorkFlow()
 	{
-		for(PluginList::iterator itr = _pluginList.begin();
-			itr!=_pluginList.end(); ++itr, --i)
-		{
-			if(i==0) {
-				PLUG_ST& plugin = *itr;
-				return plugin.pObj;
-			}
-		}
-		return 0;
+		return _workFlowPlugin.pObj;
 	}
 
-	bool PluginManager::AddPlugin(CString name)
+	bool PluginManager::SetWorkFlowPlugin(CString name)
 	{
-		PLUG_ST stPs;
+		WorkFlowPLUG_ST stPs;
 		ZeroMemory(&stPs, sizeof(stPs));
 
 		stPs.hIns = LoadLibrary(name);
@@ -62,7 +55,7 @@ namespace FC {
 		WorkFlowPluginBase* pTmp;
 		if (pFunc((void **)(&pTmp))) {
 			stPs.pObj = pTmp;
-			this->_pluginList.push_back(stPs);
+			_workFlowPlugin = stPs;
 		}
 		else {
 			AfxMessageBox("CreateWorkFlowPlugin生成插件错误！");
@@ -70,5 +63,73 @@ namespace FC {
 		}
 
 		return true;
+	}
+
+	ControllerPluginBase* PluginManager::AddControllerPlugin(CString name)
+	{
+		if(_ctrlMap.find(name) != _ctrlMap.end()) {
+			AfxMessageBox("该插件已经加载！请勿重复加载！");
+			return 0;
+		}
+
+		ControllerPLUG_ST cPs;
+		ZeroMemory(&cPs, sizeof(cPs));
+
+		cPs.hIns = LoadLibrary(name);
+		if(cPs.hIns==0) {
+			AfxMessageBox("加载插件错误：无法加载该库！");
+			return 0;
+		}
+
+		CreatePluginCallBack pFunc = 
+			(CreatePluginCallBack)GetProcAddress(cPs.hIns, "CreateControllerPlugin");
+		if(pFunc==0) {
+			AfxMessageBox("加载插件错误：找不到CreateControllerPlugin函数！");
+			return 0;
+		}
+
+		ControllerPluginBase* pTmp;
+		if (pFunc((void **)(&pTmp))) {
+			cPs.pObj = pTmp;
+			_ctrlMap.insert( Name2Controller::value_type(name, cPs) );
+		}
+		else {
+			AfxMessageBox("CreateControllerPlugin生成插件错误！");
+			return 0;
+		}
+
+		return cPs.pObj;
+	}
+
+	void PluginManager::UnLoadControllerPlugin(CString name)
+	{
+		Name2Controller::iterator itr = _ctrlMap.find(name);
+		UnLoadControllerPlugin(itr);
+	}
+
+	void PluginManager::UnLoadControllerPlugin(Name2Controller::iterator itr)
+	{
+		if( itr==_ctrlMap.end() ) return;
+
+		ControllerPLUG_ST& plugin = itr->second;
+		if(plugin.pObj) {
+			plugin.pObj->Release();
+			plugin.pObj = 0;
+
+			if(plugin.hIns)
+				FreeLibrary(plugin.hIns);
+		}
+
+		_ctrlMap.erase(itr);
+	}
+
+	ControllerPluginBase* PluginManager::GetControllerCreator(CString name)
+	{
+		Name2Controller::iterator itr = _ctrlMap.find(name);
+		if(itr!=_ctrlMap.end()) {
+			return itr->second.pObj;
+		} else {
+			return 0;
+		}
 	}
 }

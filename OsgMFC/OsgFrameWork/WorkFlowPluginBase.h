@@ -5,22 +5,17 @@
 using namespace std;
 
 namespace FC {
-	//调用者相关信息，目前主要用于存储UI信息
-	typedef void *LauncherInfo;
-
 	typedef vector<osgGA::GUIEventHandler*> GUIEventHandlerArr;
 
 	class WorkFlowPluginBase
 	{
 	protected:
-		WorkFlowPluginBase() { _launcherInfo = 0; }
+		WorkFlowPluginBase() { }
 		virtual ~WorkFlowPluginBase() {}
-		LauncherInfo _launcherInfo;
 
 	public:
 		virtual osg::Node* CreateSceneData() = 0;
 		virtual void Release() { delete this; }
-		virtual void SetLauncherInfo(LauncherInfo launcherInfo) { _launcherInfo = launcherInfo; }
 		virtual GUIEventHandlerArr CreateGUIEventHandlerArr() { GUIEventHandlerArr arr; return arr; }
 	};
 

@@ -129,6 +129,7 @@ BEGIN
     POPUP "文件(&F)"
     BEGIN
         MENUITEM "浏览osg/ive文档\r\n或打开工作流插件(&N)...\tCtrl+N", ID_FILE_NEW
+        MENUITEM "附加osg/ive文档至当前文档",            ID_FILE_ADDNEW
         MENUITEM "打开控制器插件(&O)...\tCtrl+O",      ID_FILE_OPEN
         MENUITEM "关闭(&C)",                      ID_FILE_CLOSE
         MENUITEM "保存为(&S)\tCtrl+S",             ID_FILE_SAVE
@@ -161,6 +162,10 @@ BEGIN
     POPUP "帮助(&H)"
     BEGIN
         MENUITEM "关于 OsgFrameWork(&A)...",      ID_APP_ABOUT
+    END
+    POPUP "控制器插件"
+    BEGIN
+        MENUITEM "加载",                          ID_ADD_CONTROLLER_PLUGIN
     END
 END
 

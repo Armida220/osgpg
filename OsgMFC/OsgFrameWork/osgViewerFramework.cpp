@@ -15,7 +15,6 @@ namespace FC {
 		osg::ref_ptr<osgViewer::Viewer>				Viewer;
 		osg::ref_ptr<osg::GraphicsContext::Traits>	Traits;
 		osg::ref_ptr<osg::GraphicsContext>			Gc;
-		osg::ref_ptr<osg::Camera>					Camera;
 		osg::ref_ptr<osg::Group>					Root;
 		HANDLE										Thread;
 
@@ -45,6 +44,8 @@ namespace FC {
 
 			return 0;
 		}
+
+		osg::Group* GetRoot() { return this->Root.get(); }
 
 		void Close()
 		{
@@ -179,6 +180,11 @@ namespace FC {
 	{
 		SetupCamera()(m_impl, hwnd, rect);
 		SetupManipulatorAndEventHandler()(m_impl);
+	}
+
+	osg::Group* ViewerFramework::GetRoot()
+	{
+		return m_impl->GetRoot();
 	}
 
 	bool ViewerFramework::Load(string path)

@@ -9,6 +9,7 @@
 
 #include "MainFrm.h"
 
+#include "PluginManager.h"
 #include <osgGA/GUIEventHandler>
 
 #ifdef _DEBUG
@@ -22,6 +23,7 @@ IMPLEMENT_DYNCREATE(COsgFrameWorkView, CView)
 
 BEGIN_MESSAGE_MAP(COsgFrameWorkView, CView)
 	ON_WM_CLOSE()
+	ON_COMMAND(ID_ADD_CONTROLLER_PLUGIN, &COsgFrameWorkView::OnAddControllerPlugin)
 END_MESSAGE_MAP()
 
 // COsgFrameWorkView 构造/析构
@@ -97,12 +99,9 @@ void COsgFrameWorkView::OnInitialUpdate()
 			pDoc->m_pluginManager;
 
 		FC::WorkFlowPluginBase* workFlow =
-			pm.GetWorkFlow(0);
+			pm.GetWorkFlow();
 
 		if(workFlow) { //首先尝试 插件工作流
-			//设置LauncherInfo
-			workFlow->SetLauncherInfo(this);
-			
 			//add scene data
 			osg::ref_ptr<osg::Node> node = 
 				workFlow->CreateSceneData();
@@ -111,7 +110,7 @@ void COsgFrameWorkView::OnInitialUpdate()
 			if(node.valid())
 				m_frame.Load(node);
 
-			//add event handler
+			//add event handlers
 			FC::GUIEventHandlerArr handlerArr = 
 				workFlow->CreateGUIEventHandlerArr();
 			for(unsigned int i=0; i<handlerArr.size(); ++i) {
@@ -122,7 +121,6 @@ void COsgFrameWorkView::OnInitialUpdate()
 			if( !m_frame.Load(std::string(pDoc->m_strOsgFileName)) )
 				AfxMessageBox("没有选择osg/ive文件或无法加载该文件！");
 		}
-
 	}
 	m_frame.Run();
 }
@@ -142,4 +140,33 @@ BOOL COsgFrameWorkView::PreTranslateMessage(MSG* pMsg)
 	}
 
 	return CView::PreTranslateMessage(pMsg);
+}
+
+void COsgFrameWorkView::OnAddControllerPlugin()
+{
+	CFileDialog dlg(TRUE, "打开控制器插件", NULL, 0, "plugin插件(*.plugin)|*.plugin|其他文件(*.*)|*.*||");
+	if(dlg.DoModal()!=IDOK) {
+		AfxMessageBox("没有选择任何插件！");
+		return;
+	}
+	CString name = dlg.GetPathName();
+
+	COsgFrameWorkDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	FC::PluginManager& pm = pDoc->m_pluginManager;
+
+	FC::ControllerPluginBase* ctrlCreator = 0;
+	if( ctrlCreator = pm.AddControllerPlugin(name) )
+	{
+		AfxMessageBox("成功加载控制器插件！");
+	} else {
+		AfxMessageBox("加载失败！");
+		return;
+	}
+
+	osgGA::GUIEventHandler* tmp = ctrlCreator->CreateController();
+	osgGA::MatrixManipulator* ctrl = 
+		dynamic_cast<osgGA::MatrixManipulator*>(tmp);
+	if(ctrl)
+		m_frame.GetViewer()->setCameraManipulator(ctrl);
 }

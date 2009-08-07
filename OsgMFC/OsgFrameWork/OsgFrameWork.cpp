@@ -43,6 +43,12 @@ COsgFrameWorkApp theApp;
 
 BOOL COsgFrameWorkApp::InitInstance()
 {
+	m_hMutex = ::CreateMutex(NULL,TRUE,"OsgFrameWorkOnlyOneInstance");
+	if(GetLastError() == ERROR_ALREADY_EXISTS)
+	{
+		AfxMessageBox("您已经运行了OsgFrameWork的一个实例！");  //已经运行了程序
+		return FALSE;
+	}
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
 	//则需要 InitCommonControlsEx()。否则，将无法创建窗口。
@@ -93,6 +99,7 @@ BOOL COsgFrameWorkApp::InitInstance()
 	// 仅当具有后缀时才调用 DragAcceptFiles
 	//  在 MDI 应用程序中，这应在设置 m_pMainWnd 之后立即发生
 
+	m_pMainWnd->DragAcceptFiles(TRUE); //使接受拖放文件 FC
 
 	// 分析标准外壳命令、DDE、打开文件操作的命令行
 	CCommandLineInfo cmdInfo;
@@ -165,4 +172,10 @@ void COsgFrameWorkApp::OnFileOpen()
 	CString strDllFileName = dlg.GetPathName();
 
 	CWinApp::OpenDocumentFile(strDllFileName);
+}
+int COsgFrameWorkApp::ExitInstance()
+{
+	CloseHandle(m_hMutex);
+
+	return CWinApp::ExitInstance();
 }

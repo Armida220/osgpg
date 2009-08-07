@@ -55,6 +55,8 @@ namespace FC {
 		bool Load(std::string path);
 		void Load(osg::Node* node);
 
+		osg::Group* GetRoot();
+
 		void Run();
 		void Stop();
 

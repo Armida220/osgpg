@@ -49,7 +49,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	dlg->Create(CSplashDialog::IDD,this); //创建对话框
 	dlg->ShowWindow(SW_SHOW); //显示对话框
 	dlg->UpdateWindow();
-	Sleep(2000); //画面显示停留时间，单位为毫秒 
+	Sleep(1000); //画面显示停留时间，单位为毫秒 
 
 
 	if (CMDIFrameWnd::OnCreate(lpCreateStruct) == -1)
@@ -77,6 +77,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockControlBar(&m_wndToolBar);
 
 	dlg->DestroyWindow(); //销毁对话框 
+
 	return 0;
 }
 

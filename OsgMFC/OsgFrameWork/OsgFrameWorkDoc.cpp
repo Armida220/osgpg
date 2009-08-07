@@ -7,6 +7,7 @@
 #include "OsgFrameWorkDoc.h"
 #include "OsgFrameWorkView.h"
 #include <osgDB/WriteFile>
+#include <osgDB/ReadFile>
 #include <osgDB/FileNameUtils>
 #include <string>
 using namespace std;
@@ -24,6 +25,7 @@ BEGIN_MESSAGE_MAP(COsgFrameWorkDoc, CDocument)
 	ON_COMMAND(ID_FILE_OPEN, &COsgFrameWorkDoc::OnFileOpen)
 	//ON_COMMAND(ID_FILE_NEW, &COsgFrameWorkDoc::OnFileOpen)
 	ON_COMMAND(ID_FILE_SAVE, &COsgFrameWorkDoc::OnFileSave)
+	ON_COMMAND(ID_FILE_ADDNEW, &COsgFrameWorkDoc::OnFileAddnew)
 END_MESSAGE_MAP()
 
 
@@ -42,7 +44,7 @@ BOOL COsgFrameWorkDoc::OnNewDocument()
 {
 	m_strOsgFileName = "";
 
-	CFileDialog dlg(TRUE, "打开osg、ive文件或工作流插件", NULL, 0, "osg文件(*.osg)|*.osg|ive文件(*.ive)|*.ive|plugin插件(*.plugin)|*.plugin|");
+	CFileDialog dlg(TRUE, "打开osg、ive文件或工作流插件", NULL, 0, "osg文件(*.osg)|*.osg|ive文件(*.ive)|*.ive|plugin插件(*.plugin)|*.plugin|其他文件(*.*)|*.*||");
 	if(dlg.DoModal()!=IDOK) {
 		AfxMessageBox("没有选择任何文件！");
 		if (!CDocument::OnNewDocument())
@@ -52,14 +54,14 @@ BOOL COsgFrameWorkDoc::OnNewDocument()
 	CString name = dlg.GetPathName();
 	CString ext = dlg.GetFileExt();
 
-	if( ext.CompareNoCase("osg")==0 || 
-		ext.CompareNoCase("ive")==0 )
-		m_strOsgFileName = name;
-	else
-		if( m_pluginManager.AddPlugin(name) )
+	if( ext.CompareNoCase("plugin")==0 ) {
+		if( m_pluginManager.SetWorkFlowPlugin(name) )
 		{
 			AfxMessageBox("成功加载插件！");
 		}
+	} else {
+		m_strOsgFileName = name;
+	}
 
 	if (!CDocument::OnNewDocument())
 		return FALSE;
@@ -116,7 +118,7 @@ void COsgFrameWorkDoc::OnFileOpen()
 
 	CString strDllFileName(lpszPathName);
 
-	if( m_pluginManager.AddPlugin(strDllFileName) )
+	if( m_pluginManager.AddWorkFlowPlugin(strDllFileName) )
 	{
 		AfxMessageBox("成功加载插件！");
 	}
@@ -127,26 +129,19 @@ BOOL COsgFrameWorkDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
 	//if (!CDocument::OnOpenDocument(lpszPathName))
 	//	return FALSE;
-/*
-	CString strDllFileName(lpszPathName);
 
-	if( m_pluginManager.AddPlugin(strDllFileName) )
-	{
-		AfxMessageBox("成功加载插件！");
-	}
-*/
 	CString name(lpszPathName);
 	string ext_ = osgDB::getFileExtension(string(name));
 	CString ext( ext_.c_str() );
 
-	if( ext.CompareNoCase("osg")==0 || 
-		ext.CompareNoCase("ive")==0 )
-		m_strOsgFileName = name;
-	else
-		if( m_pluginManager.AddPlugin(name) )
+	if( ext.CompareNoCase("plugin")==0 ) {
+		if( m_pluginManager.SetWorkFlowPlugin(name) )
 		{
 			AfxMessageBox("成功加载插件！");
 		}
+	} else {
+		m_strOsgFileName = name;
+	}
 
 	return TRUE;
 }
@@ -177,3 +172,32 @@ void COsgFrameWorkDoc::OnFileSave()
 	}
 }
 
+
+void COsgFrameWorkDoc::OnFileAddnew()
+{
+	CFileDialog dlg(TRUE, "打开osg、ive文件", NULL, 0, "osg文件(*.osg)|*.osg|ive文件(*.ive)|*.ive|其他文件(*.*)|*.*||");
+	if(dlg.DoModal()!=IDOK) {
+		AfxMessageBox("没有选择任何文件！");
+		return;
+	}
+	CString name = dlg.GetPathName();
+	string openName(name);
+
+	CMDIChildWnd* pChild=(CMDIChildWnd*)((CFrameWnd*)AfxGetApp()->m_pMainWnd)->GetActiveFrame();
+	COsgFrameWorkView* pView=(COsgFrameWorkView*)pChild->GetActiveView();
+	if(!pView)
+		return;
+
+	setlocale(LC_ALL, "chs");
+
+	osg::Group* root = pView->m_frame.GetRoot();
+	
+	osg::ref_ptr<osg::Node> newNode = osgDB::readNodeFile(openName);
+
+	if( root->addChild(newNode.get()) ) {
+		AfxMessageBox("新文档成功附加至当前文档！");
+	} else {
+		AfxMessageBox("附加文档失败！");
+	}
+
+}
