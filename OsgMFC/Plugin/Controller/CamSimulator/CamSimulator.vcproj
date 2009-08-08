@@ -101,7 +101,8 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
+			UseOfMFC="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -122,9 +123,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(OSGHOME)/include&quot;;&quot;$(SolutionDir)Plugin\Controller\CamCalibrator&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				Optimization="2"
+				AdditionalIncludeDirectories="&quot;$(OSGHOME)/include&quot;;&quot;$(SolutionDir)Plugin\Controller\CamCalibrator&quot;;&quot;$(SolutionDir)OsgFrameWork&quot;;&quot;$(SolutionDir)Plugin\ViewerFrameworkImpl&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CAMSIMULATOR_EXPORTS"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
@@ -143,10 +144,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="bgeo.lib vpgl.lib vpgl_algo.lib vpl.lib testlib.lib vnl_io.lib vgl_algo.lib vnl_algo.lib netlib.lib v3p_netlib.lib vgl_io.lib vgl.lib vsl.lib vnl.lib vbl.lib vcl.lib CamCalibrator.lib OpenThreads.lib osg.lib osgDB.lib osgGA.lib osgUtil.lib osgViewer.lib"
-				OutputFile="$(OutDir)/CamSimulator.exe"
+				AdditionalDependencies="ViewerFrameworkImpl.lib CamCalibrator.lib OpenThreads.lib osg.lib osgDB.lib osgGA.lib osgUtil.lib osgViewer.lib"
+				OutputFile="$(OutDir)/CamSimulator.plugin"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(OSGHOME)/lib&quot;;&quot;$(OutDir)&quot;;&quot;$(VXLBIN)/lib/release&quot;"
+				AdditionalLibraryDirectories="&quot;$(OSGHOME)/lib&quot;;&quot;$(OutDir)&quot;;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -189,7 +190,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\main.cpp"
+				RelativePath=".\CamParameters.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CamSimulator.cpp"
 				>
 			</File>
 		</Filter>
@@ -198,6 +203,18 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\CamParameters.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CamSimulator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\stdafx.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="资源文件"

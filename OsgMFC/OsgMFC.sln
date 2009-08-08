@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PointCloudClassifyReader", "Plugin\PointCloud\Classify\PointCloudClassifyReader\PointCloudClassifyReader.vcproj", "{325CD393-3A67-4B30-A311-2F549990C7CF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OsgFrameWork", "OsgFrameWork\OsgFrameWork.vcproj", "{D9407026-C64B-4612-AE50-AEE6A8A6BA01}"
+	ProjectSection(ProjectDependencies) = postProject
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7} = {69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ive2off", "Plugin\Convert\ive2off\ive2off.vcproj", "{3CA3EC5C-3713-4BA2-87B8-FC1FF3B35D2C}"
 EndProject
@@ -53,9 +56,12 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CamSimulator", "Plugin\Controller\CamSimulator\CamSimulator.vcproj", "{0BB7D620-092E-491D-B406-D878C94493CA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{94EE99A5-0E4B-419B-B688-8F3FF08F41E0} = {94EE99A5-0E4B-419B-B688-8F3FF08F41E0}
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7} = {69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CamCalibrator", "Plugin\Controller\CamCalibrator\CamCalibrator.vcproj", "{94EE99A5-0E4B-419B-B688-8F3FF08F41E0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ViewerFrameworkImpl", "Plugin\ViewerFrameworkImpl\ViewerFrameworkImpl.vcproj", "{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -207,6 +213,16 @@ Global
 		{94EE99A5-0E4B-419B-B688-8F3FF08F41E0}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{94EE99A5-0E4B-419B-B688-8F3FF08F41E0}.Release|Win32.ActiveCfg = Release|Win32
 		{94EE99A5-0E4B-419B-B688-8F3FF08F41E0}.Release|Win32.Build.0 = Release|Win32
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}.Debug|Win32.Build.0 = Debug|Win32
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}.Release|Any CPU.ActiveCfg = Release|Win32
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}.Release|Win32.ActiveCfg = Release|Win32
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -216,6 +232,7 @@ Global
 		{C7BF8C48-B6C4-402E-B4DB-7163CB35D5C6} = {D7BC48D8-DBF7-4CE7-925A-E52690EC3B94}
 		{0AED93CB-D5FB-4A6F-89A6-F799D0446A9F} = {D7BC48D8-DBF7-4CE7-925A-E52690EC3B94}
 		{C8744111-92E7-4484-80B2-8B53FEC7BC7D} = {D7BC48D8-DBF7-4CE7-925A-E52690EC3B94}
+		{69954EFE-1DDF-4DF8-9D63-DB691EE97BF7} = {D7BC48D8-DBF7-4CE7-925A-E52690EC3B94}
 		{3CA3EC5C-3713-4BA2-87B8-FC1FF3B35D2C} = {39C9325F-1890-4E8B-AD37-A8E4F5AB7458}
 		{74F5938A-A060-4689-9E1B-C3012613244E} = {C7BF8C48-B6C4-402E-B4DB-7163CB35D5C6}
 		{38F7F926-2F3A-4590-8605-E57669C405B6} = {C7BF8C48-B6C4-402E-B4DB-7163CB35D5C6}

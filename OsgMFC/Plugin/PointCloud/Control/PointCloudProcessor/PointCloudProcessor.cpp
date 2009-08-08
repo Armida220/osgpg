@@ -2,12 +2,12 @@
 //
 
 #include "stdafx.h"
-#include "PointCloudProcessor.h"
-#include "PointCloudOpener.h"
-
 #include "../PointCloudProcess/PointCloudProcess/CloudStation.h"
 #include "../PointCloudProcess/PointCloudProcess/Controller.h"
 #include "../PointCloudProcess/PointCloudProcess/DataLoader.h"
+
+#include "PointCloudProcessor.h"
+#include "PointCloudOpener.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -41,10 +41,13 @@ namespace FC {
 		delete this;
 	}
 
-	osg::Node* PointCloudProcessor::CreateSceneData()
+	void PointCloudProcessor::SetSceneData(osgViewer::CompositeViewer* viewer)
 	{
-		osg::ref_ptr<osg::Group> root = new osg::Group;
-		this->sceneRoot = root.get();
+		osg::ref_ptr<osg::Group> ret = new osg::Group;
+		this->sceneRoot = ret.get();
+
+		osg::Group* root = viewer->getView(0)->getSceneData()->asGroup();
+		root->addChild(ret);
 
 		setlocale(LC_ALL, "chs");
 
@@ -60,27 +63,22 @@ namespace FC {
 			if(pcOpener.m_iPointCloudChoice!=0) {
 				osg::ref_ptr<CloudStation> cs = cptRW.Read(pcOpener.m_strFileName.GetBuffer(), 
 					pcOpener.m_iPointCloudChoice-1);
-				root->addChild(cs.get());
+				ret->addChild(cs.get());
 			} else {
 				osg::ref_ptr<CloudStation> cs2 = tmtRW.Read(pcOpener.m_strFileName.GetBuffer(), 
 					pcOpener.m_iTriangleChoice-1);
-				root->addChild(cs2.get());
+				ret->addChild(cs2.get());
 			}
 		}
 #endif
 
 		AfxMessageBox("第二步，浏览、操纵点云/三角网");
-
-		return root.get();
 	}
 
-	GUIEventHandlerArr PointCloudProcessor::CreateGUIEventHandlerArr()
-	{
-		GUIEventHandlerArr local_handlerArr;
-		
+	void PointCloudProcessor::SetGUIEventHandlers(osgViewer::CompositeViewer* viewer)
+	{	
 		osg::ref_ptr<Controller> ctrl = new Controller;
-		local_handlerArr.push_back(ctrl.get());
-		this->handlerArr.push_back(ctrl);
+		viewer->getView(0)->addEventHandler(ctrl);
 
 		AfxMessageBox("创建控制器！");
 
@@ -115,7 +113,5 @@ namespace FC {
 		setter->Create();
 		setter->ShowWindow(SW_SHOW);
 #endif
-
-		return local_handlerArr;
 	}
 }

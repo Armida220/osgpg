@@ -41,7 +41,7 @@ namespace FC {
 		osg::ref_ptr<osg::Node> sceneRoot;
 
 	public:
-		virtual osg::Node* CreateSceneData();
+		virtual void SetSceneData(osgViewer::CompositeViewer* viewer);
 		virtual void Release();
 	};
 }

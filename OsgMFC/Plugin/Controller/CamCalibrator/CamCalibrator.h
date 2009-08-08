@@ -2,6 +2,11 @@
 Using VXL
 --Simbaforrest
 */
+#ifdef CALIBRATE_EXPORTS
+#define CALIBRATE_API __declspec(dllexport)
+#else
+#define CALIBRATE_API __declspec(dllimport)
+#endif
 
 #include <iostream>
 using namespace std;
@@ -30,7 +35,7 @@ namespace FC {
 
 	typedef unsigned int Uint;
 
-	void calibrate(K_Matrix k, Uint correspondentNum,
+	CALIBRATE_API void calibrate(K_Matrix k, Uint correspondentNum,
 		ImagePointArr imgPts, WorldPointArr wldPts,
 		R_Matrix& r_out, C_Matrix& c_out, PrincipleAxis& pa_out, P_Matrix& p_out);
 }

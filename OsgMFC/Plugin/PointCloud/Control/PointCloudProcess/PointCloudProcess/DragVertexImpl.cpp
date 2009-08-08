@@ -37,8 +37,8 @@ void DragVertexImpl::disconnect()
 bool DragVertexImpl::drag(const osgGA::GUIEventAdapter& ea, 
 													osgGA::GUIActionAdapter& aa)
 {
-	osgViewer::Viewer* viewer =
-		dynamic_cast<osgViewer::Viewer*>( &aa );
+	osgViewer::View* viewer =
+		dynamic_cast<osgViewer::View*>( &aa );
 	if (!viewer)
 		return false;
 
@@ -104,8 +104,8 @@ bool DragVertexImpl::drag(const osgGA::GUIEventAdapter& ea,
 bool DragVertexImpl::connect(const osgGA::GUIEventAdapter& ea, 
 														 osgGA::GUIActionAdapter& aa)
 {
-	osgViewer::Viewer* viewer =
-		dynamic_cast<osgViewer::Viewer*>( &aa );
+	osgViewer::View* viewer =
+		dynamic_cast<osgViewer::View*>( &aa );
 	if (!viewer)
 		return false;
 
@@ -198,8 +198,8 @@ bool DragVertexImpl::operator()(const osgGA::GUIEventAdapter& ea,
 																osgGA::GUIActionAdapter& aa)
 {
 	if(this->m_pointsDragger->getNumParents()==0) {
-		osgViewer::Viewer* viewer =
-			dynamic_cast<osgViewer::Viewer*>( &aa );
+		osgViewer::View* viewer =
+			dynamic_cast<osgViewer::View*>( &aa );
 		if (!viewer)
 			return false;
 

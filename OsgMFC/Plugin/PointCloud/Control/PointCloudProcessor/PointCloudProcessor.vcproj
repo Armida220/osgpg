@@ -121,7 +121,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(OSGHOME)\include&quot;;&quot;$(SolutionDir)OsgFrameWork&quot;"
+				Optimization="2"
+				AdditionalIncludeDirectories="&quot;$(OSGHOME)\include&quot;;&quot;$(SolutionDir)OsgFrameWork&quot;;&quot;$(SolutionDir)Plugin\ViewerFrameworkImpl&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;POINTCLOUDPROCESSOR_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -140,10 +141,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="PointCloudProcess.lib osgManipulator.lib OpenThreads.lib osg.lib osgDB.lib osgGA.lib osgUtil.lib osgViewer.lib"
+				AdditionalDependencies="ViewerFrameworkImpl.lib PointCloudProcess.lib osgManipulator.lib OpenThreads.lib osg.lib osgDB.lib osgGA.lib osgUtil.lib osgViewer.lib"
 				OutputFile="$(OutDir)\$(ProjectName).plugin"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(OSGHOME)\lib&quot;;&quot;$(SolutionDir)release&quot;"
+				AdditionalLibraryDirectories="&quot;$(OSGHOME)\lib&quot;;&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

@@ -14,7 +14,7 @@
 
 #include <osg/ref_ptr>
 #include <osg/Group>
-#include <osgViewer/Viewer>
+#include <osgViewer/CompositeViewer>
 #include <osg/NodeVisitor>
 #include <osgDB/ReadFile>
 #include <osgDB/WriteFile>
@@ -48,18 +48,24 @@ namespace FC {
 		~ViewerFramework(void);
 
 		void SetupWindow(HWND hwnd, RECT rect);
+		void Resize(RECT rect);
 
-		void AddEventHandler(osgGA::GUIEventHandler* handler);
-		osgViewer::Viewer* GetViewer();
+		//add eventhandler for view i 
+		void AddEventHandler(osgGA::GUIEventHandler* handler, int i=0);
+		osgViewer::CompositeViewer* GetViewer();
 
-		bool Load(std::string path);
-		void Load(osg::Node* node);
+		//add model for to view i 's root
+		bool AddModel(std::string path, int i=0);
+		void AddModel(osg::Node* node, int i=0);
 
-		osg::Group* GetRoot();
+		void InitSceneRoot();
+		//get view i 's root
+		osg::Node* GetRoot(int i=0);
 
 		void Run();
 		void Stop();
 
+		void ResetImpl(ViewerFrameworkImpl* newImpl);
 		void ReleaseImpl();
 
 	protected:

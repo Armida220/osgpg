@@ -34,8 +34,8 @@ namespace FC {
 		DragModeDialog* dragDlg;
 		DragVertexModeDialog* dragVertexDlg;
 	public:
-		virtual osg::Node* CreateSceneData();
-		virtual GUIEventHandlerArr CreateGUIEventHandlerArr();
+		virtual void SetSceneData(osgViewer::CompositeViewer* viewer);
+		virtual void SetGUIEventHandlers(osgViewer::CompositeViewer* viewer);
 		virtual void Release();
 	};
 }

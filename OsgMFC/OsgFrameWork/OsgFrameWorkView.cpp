@@ -16,7 +16,6 @@
 #define new DEBUG_NEW
 #endif
 
-
 // COsgFrameWorkView
 
 IMPLEMENT_DYNCREATE(COsgFrameWorkView, CView)
@@ -24,14 +23,13 @@ IMPLEMENT_DYNCREATE(COsgFrameWorkView, CView)
 BEGIN_MESSAGE_MAP(COsgFrameWorkView, CView)
 	ON_WM_CLOSE()
 	ON_COMMAND(ID_ADD_CONTROLLER_PLUGIN, &COsgFrameWorkView::OnAddControllerPlugin)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 // COsgFrameWorkView 构造/析构
 
 COsgFrameWorkView::COsgFrameWorkView()
 {
-	// TODO: 在此处添加构造代码
-
 }
 
 COsgFrameWorkView::~COsgFrameWorkView()
@@ -79,7 +77,6 @@ COsgFrameWorkDoc* COsgFrameWorkView::GetDocument() const // 非调试版本是内联的
 }
 #endif //_DEBUG
 
-
 // COsgFrameWorkView 消息处理程序
 
 void COsgFrameWorkView::OnInitialUpdate()
@@ -89,9 +86,6 @@ void COsgFrameWorkView::OnInitialUpdate()
 	CRect rect;
 	GetClientRect(&rect);
 
-	m_frame.SetupWindow(GetSafeHwnd(), rect);
-
-	//get main frame
 	COsgFrameWorkDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if(pDoc) {
@@ -102,23 +96,20 @@ void COsgFrameWorkView::OnInitialUpdate()
 			pm.GetWorkFlow();
 
 		if(workFlow) { //首先尝试 插件工作流
-			//add scene data
-			osg::ref_ptr<osg::Node> node = 
-				workFlow->CreateSceneData();
-			//ATTENTION! can not use m_frame.GetViewer()->setSceneData(), 
-			//for the m_frame will eventually setSceneData() at Run()
-			if(node.valid())
-				m_frame.Load(node);
+			//1. try new impl of ViewerFramework
+			m_frame.ResetImpl(
+				workFlow->CreateViewerFrameworkImpl() );
+			m_frame.SetupWindow(GetSafeHwnd(), rect);
 
-			//add event handlers
-			FC::GUIEventHandlerArr handlerArr = 
-				workFlow->CreateGUIEventHandlerArr();
-			for(unsigned int i=0; i<handlerArr.size(); ++i) {
-				osgGA::GUIEventHandler* handler = handlerArr[i];
-				m_frame.GetViewer()->addEventHandler(handler);
-			}
+			//2. add scene data
+			m_frame.InitSceneRoot();
+			workFlow->SetSceneData(m_frame.GetViewer());
+
+			//3. add event handlers
+			workFlow->SetGUIEventHandlers(m_frame.GetViewer());
 		} else { //进行默认工作流
-			if( !m_frame.Load(std::string(pDoc->m_strOsgFileName)) )
+			m_frame.SetupWindow(GetSafeHwnd(), rect);
+			if( !m_frame.AddModel(std::string(pDoc->m_strOsgFileName)) )
 				AfxMessageBox("没有选择osg/ive文件或无法加载该文件！");
 		}
 	}
@@ -164,9 +155,21 @@ void COsgFrameWorkView::OnAddControllerPlugin()
 		return;
 	}
 
+	int ViewID=0; // TODO 默认添加至第0号View
+
 	osgGA::GUIEventHandler* tmp = ctrlCreator->CreateController();
 	osgGA::MatrixManipulator* ctrl = 
 		dynamic_cast<osgGA::MatrixManipulator*>(tmp);
 	if(ctrl)
-		m_frame.GetViewer()->setCameraManipulator(ctrl);
+		m_frame.GetViewer()->getView(ViewID)->setCameraManipulator(ctrl);
+}
+
+void COsgFrameWorkView::OnSize(UINT nType, int cx, int cy)
+{
+	CView::OnSize(nType, cx, cy);
+
+	CRect rect;
+	GetClientRect(&rect);
+
+	m_frame.Resize(rect);
 }

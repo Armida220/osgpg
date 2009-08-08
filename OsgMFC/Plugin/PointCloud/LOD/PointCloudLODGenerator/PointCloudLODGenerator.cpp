@@ -63,7 +63,7 @@ bool CreateWorkFlowPlugin(void **pobj)
 }
 
 namespace FC {
-	osg::Node* PointCloudLODGenerator::CreateSceneData()
+	void PointCloudLODGenerator::SetSceneData(osgViewer::CompositeViewer* viewer)
 	{
 		setlocale(LC_ALL, "chs");
 
@@ -72,7 +72,7 @@ namespace FC {
 		CFileDialog dlg(TRUE, "选择待生成LOD的点云文件", NULL, 0, "All(*.*)|*.*|");
 		if(dlg.DoModal()!=IDOK) {
 			AfxMessageBox("没有选择文件，工作流结束！");
-			return 0;
+			return;
 		}
 		CString strFileName = dlg.GetPathName();
 
@@ -80,20 +80,19 @@ namespace FC {
 		CFileDialog saveDlg(FALSE, "选择保存文件名", NULL, 0, "osg文件(*.osg)|*.osg|ive文件(*.ive)|*.ive|");
 		if(saveDlg.DoModal()!=IDOK) {
 			AfxMessageBox("没有选择保存文件名, 工作流结束！");
-			return 0;
+			return;
 		}
 		CString strSaveFileName = saveDlg.GetPathName();
 
-		/*
-		AfxMessageBox("第三步，设置参数");
-				LODParaSetter setter;
-				float sampleRatio=0.1;
-				unsigned int targetNumOnLeaf = 100;
-				if(setter.DoModal()==IDOK) {
-					sampleRatio = setter.m_sampleRatio;
-					targetNumOnLeaf = setter.m_targetNumOnLeaf;
-				}*/
 		
+		AfxMessageBox("第三步，设置参数");
+		LODParaSetter setter;
+		float sampleRatio=0.1;
+		unsigned int targetNumOnLeaf = 100;
+		if(setter.DoModal()==IDOK) {
+			sampleRatio = setter.m_sampleRatio;
+			targetNumOnLeaf = setter.m_targetNumOnLeaf;
+		}
 
 		AfxMessageBox("第三步：读取点云文件并进行转换，请耐心等待...");
 
@@ -107,7 +106,7 @@ namespace FC {
 
 		if(shellinfo.hProcess==NULL) {
 			AfxMessageBox("无法打开应用程序：PointsDividor.exe！工作流结束！");
-			return 0;
+			return;
 		}
 
 #ifndef _DEBUG
@@ -144,10 +143,11 @@ namespace FC {
 
 		if(ret==0) {
 			AfxMessageBox("无法读取该文件！");
-			return 0;
+			return;
 		}
 
-		return ret;
+		osg::Group* root = viewer->getView(0)->getSceneData()->asGroup();
+		root->addChild(ret);
 	}
 
 	void PointCloudLODGenerator::Release()

@@ -162,7 +162,8 @@ void COsgFrameWorkDoc::OnFileSave()
 
 	setlocale(LC_ALL, "chs");
 
-	osg::Node* node = pView->m_frame.GetViewer()->getSceneData();
+	//here we use view 0 as the default scene view which contains all the sceneData
+	osg::Node* node = pView->m_frame.GetViewer()->getView(0)->getSceneData();
 	if(node) {
 		if( !osgDB::writeNodeFile(*node, saveName) ) {
 			AfxMessageBox("无法保存到指定路径！");
@@ -190,11 +191,8 @@ void COsgFrameWorkDoc::OnFileAddnew()
 
 	setlocale(LC_ALL, "chs");
 
-	osg::Group* root = pView->m_frame.GetRoot();
-	
-	osg::ref_ptr<osg::Node> newNode = osgDB::readNodeFile(openName);
-
-	if( root->addChild(newNode.get()) ) {
+	//默认添加至第0号view
+	if( pView->m_frame.AddModel(openName, 0) ) {
 		AfxMessageBox("新文档成功附加至当前文档！");
 	} else {
 		AfxMessageBox("附加文档失败！");

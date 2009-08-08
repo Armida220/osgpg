@@ -45,6 +45,7 @@ public:
 	afx_msg void OnClose();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnAddControllerPlugin();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 
 #ifndef _DEBUG  // OsgFrameWorkView.cpp 中的调试版本

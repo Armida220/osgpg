@@ -8,8 +8,8 @@ PickTriangleImpl::PickTriangleImpl(ostream& _log) : ControlImpl(_log)
 bool PickTriangleImpl::operator()(const osgGA::GUIEventAdapter& ea,
 																						osgGA::GUIActionAdapter& aa)
 {
-	osgViewer::Viewer* viewer =
-		dynamic_cast<osgViewer::Viewer*>( &aa );
+	osgViewer::View* viewer =
+		dynamic_cast<osgViewer::View*>( &aa );
 	if (!viewer)
 		return false;
 

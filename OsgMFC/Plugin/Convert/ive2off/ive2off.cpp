@@ -13,8 +13,6 @@
 
 CWinApp theApp;
 
-using namespace std;
-
 #include <osg/ref_ptr>
 #include <osg/Group>
 #include <osgViewer/Viewer>
@@ -152,7 +150,7 @@ namespace FC {
 		delete this;
 	}
 
-	osg::Node* Ive2off::CreateSceneData()
+	void Ive2off::SetSceneData(osgViewer::CompositeViewer* viewer)
 	{
 		setlocale(LC_ALL, "chs");
 
@@ -161,7 +159,7 @@ namespace FC {
 		CFileDialog dlg(TRUE, "选择待转换osg或ive文件", NULL, 0, "osg(*.osg)|*.osg|ive(*.ive)|*.ive|");
 		if(dlg.DoModal()!=IDOK) {
 			AfxMessageBox("没有选择osg或ive文件，工作流结束！");
-			return 0;
+			return;
 		}
 		CString strFileName = dlg.GetPathName();
 
@@ -171,18 +169,19 @@ namespace FC {
 
 		if(ret==0) {
 			AfxMessageBox("无法读取该文件！");
-			return 0;
+			return;
 		}
+
+		osg::Group* root = viewer->getView(0)->getSceneData()->asGroup();
+		root->addChild(ret);
 
 		AfxMessageBox("第三步：转换成off文件并保存");
 		CFileDialog saveDlg(FALSE, "选择保存文件名", NULL, 0, "off文件(*.off)|*.off|All(*.*)|*.*|");
 		if(saveDlg.DoModal()!=IDOK) {
 			AfxMessageBox("没有选择保存文件名！");
-			return ret;
+			return;
 		}
 		CString strSaveFileName = saveDlg.GetPathName();
 		OutPutAsOFF(ret, string(strSaveFileName));
-
-		return ret;
 	}
 }

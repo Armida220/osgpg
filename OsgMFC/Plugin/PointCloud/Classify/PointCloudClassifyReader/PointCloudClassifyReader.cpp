@@ -51,16 +51,17 @@ bool CreateWorkFlowPlugin(void **pobj)
 
 namespace FC {
 
-	osg::Node* PointCloudClassifyReader::CreateSceneData()
+	void PointCloudClassifyReader::SetSceneData(osgViewer::CompositeViewer* viewer)
 	{
 		PointRecArr pointArr;
 		if(!ReadPointDataFile(pointArr))
-			return 0;
+			return;
 
 		osg::Node* geode = (osg::Node*)(PointArr2Geode(pointArr));
 		sceneRoot = geode;
 
-		return geode;
+		osg::Group* root = viewer->getView(0)->getSceneData()->asGroup();
+		root->addChild(geode);
 	}
 
 	unsigned int estimatePointsNum(CString fileName)

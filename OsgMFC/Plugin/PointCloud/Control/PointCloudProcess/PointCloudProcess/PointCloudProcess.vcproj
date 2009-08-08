@@ -140,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="PointDividorLibrary.lib osgManipulator.lib osg.lib osgDB.lib osgUtil.lib osgText.lib OpenThreads.lib osgGA.lib osgViewer.lib PoissonDLL.lib"
+				AdditionalDependencies="osgManipulator.lib osg.lib osgDB.lib osgUtil.lib osgText.lib OpenThreads.lib osgGA.lib osgViewer.lib PoissonDLL.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(OSGHOME)\lib&quot;;..\DLLFiles\ReleaseDLL;&quot;$(SolutionDir)Plugin\PointCloud\Control\PointCloudProcess\PointCloudProcess&quot;;&quot;$(SolutionDir)release&quot;"
 				GenerateDebugInformation="true"

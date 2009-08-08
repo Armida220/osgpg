@@ -62,7 +62,7 @@ bool CreateWorkFlowPlugin(void **pobj)
 }
 
 namespace FC {
-	osg::Node* BuildingSimplifier::CreateSceneData()
+	void BuildingSimplifier::SetSceneData(osgViewer::CompositeViewer* viewer)
 	{
 		setlocale(LC_ALL, "chs");
 
@@ -70,13 +70,16 @@ namespace FC {
 
 		setWorkingPath();
 
+		//init
+		osg::Group* root = viewer->getView(0)->getSceneData()->asGroup();
+
 		CString cmd = "ModelSimplify.exe";
 		CString par;
 		SHELLEXECUTEINFO shellinfo = runConsole(cmd, par);
 
 		if(shellinfo.hProcess==NULL) {
 			AfxMessageBox("无法打开应用程序：ModelSimplify.exe！工作流结束！");
-			return 0;
+			return;
 		}
 
 #ifndef _DEBUG
@@ -112,7 +115,7 @@ namespace FC {
 		CFileDialog dlg(TRUE, "选择简化后建筑场景文件", NULL, 0, "osg(*.osg)|*.osg|ive(*.ive)|*.ive|");
 		if(dlg.DoModal()!=IDOK) {
 			AfxMessageBox("没有选择文件，工作流结束！");
-			return 0;
+			return;
 		}
 		CString strFileName = dlg.GetPathName();
 
@@ -121,10 +124,10 @@ namespace FC {
 
 		if(ret==0) {
 			AfxMessageBox("无法读取该文件！");
-			return 0;
+			return;
 		}
 
-		return ret;
+		root->addChild(ret);
 	}
 
 	void BuildingSimplifier::Release()
