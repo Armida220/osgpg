@@ -12,8 +12,10 @@ IMPLEMENT_DYNAMIC(LODParaSetter, CDialog)
 
 LODParaSetter::LODParaSetter(CWnd* pParent /*=NULL*/)
 	: CDialog(LODParaSetter::IDD, pParent)
-	, m_sampleRatio(0)
-	, m_targetNumOnLeaf(0)
+	, m_sampleRatio(0.01)
+	, m_targetNumOnLeaf(500)
+	, maxBoundVisibleRange(800)
+	, minBoundVisibleRange(100)
 {
 
 }
@@ -27,6 +29,8 @@ void LODParaSetter::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT_SAMPLE, m_sampleRatio);
 	DDX_Text(pDX, IDC_EDIT_TARGET, m_targetNumOnLeaf);
+	DDX_Text(pDX, IDC_EDIT_MAXBOUNDVISIBLERANGLE, maxBoundVisibleRange);
+	DDX_Text(pDX, IDC_EDIT_MINBOUNDVISIBLERANGE, minBoundVisibleRange);
 }
 
 

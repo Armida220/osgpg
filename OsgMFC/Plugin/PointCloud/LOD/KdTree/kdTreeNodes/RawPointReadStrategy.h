@@ -48,4 +48,17 @@ namespace FC {
 		MemMapInputor*	inputor;
 		unsigned int		_numOfPointsToRead;
 	};
+
+	class UnknownNumStrategy : public RawPointReadStrategy
+	{
+	public:
+		UnknownNumStrategy() { _log.open("UnknownNumStrategy.log"); }
+		~UnknownNumStrategy() { _log.close(); }
+
+		bool Init(const char* fileName, unsigned int recordType);
+		bool Read(PointSet& pointSet);
+		void Close();
+	protected:
+		MemMapInputor*	inputor;
+	};
 }

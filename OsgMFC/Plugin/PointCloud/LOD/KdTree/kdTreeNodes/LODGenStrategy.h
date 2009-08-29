@@ -42,5 +42,8 @@ namespace FC {
 
 		BuildParameters _bp;
 		PointSet* _points;
+
+		double _maxBoundRadius;
+		double _minBoundRadius;
 	};
 }

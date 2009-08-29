@@ -129,7 +129,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(OSGHOME)/include&quot;;..\OsgMFC;&quot;$(SolutionDir)Plugin\ViewerFrameworkImpl&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
@@ -198,6 +198,10 @@
 			>
 			<File
 				RelativePath=".\ChildFrm.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Console.cpp"
 				>
 			</File>
 			<File
@@ -296,6 +300,10 @@
 			>
 			<File
 				RelativePath=".\ChildFrm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Console.h"
 				>
 			</File>
 			<File

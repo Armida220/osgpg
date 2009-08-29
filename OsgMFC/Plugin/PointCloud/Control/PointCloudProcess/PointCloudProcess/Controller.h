@@ -84,6 +84,7 @@ public://TODO should use one abstract function to execute
 	osg::Vec3Array* GetVertexArray();
 	const vector<osg::DrawElementsUInt*>* GetTriangleArray();
 	bool SetTexture(osg::Vec2Array& textureCoords, string textureName);
+	osg::ref_ptr<osg::Vec3Array> GetSignedPoints();
 
 	//pick triangle impl
 	const Triangle& GetTriangle();

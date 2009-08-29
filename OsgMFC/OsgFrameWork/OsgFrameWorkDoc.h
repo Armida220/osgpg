@@ -42,6 +42,7 @@ public:
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	afx_msg void OnFileSave();
 	afx_msg void OnFileAddnew();
+	afx_msg void OnFileSaveAs();
 };
 
 

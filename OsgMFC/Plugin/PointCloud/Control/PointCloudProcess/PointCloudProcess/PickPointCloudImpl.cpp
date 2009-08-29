@@ -91,6 +91,16 @@ osg::ref_ptr<osg::Vec3Array> PickPointCloudImpl::GetTransformedPoints()
 	return false;
 }
 
+osg::ref_ptr<osg::Vec3Array> PickPointCloudImpl::GetSignedPoints()
+{
+	CloudStation* cs = dynamic_cast<CloudStation*>(sel);
+	if(cs)
+		return cs->GetSignedPoints();
+
+	log<<"Error:  have not select any points!"<<endl;
+	return false;
+}
+
 double PickPointCloudImpl::GetTriangleArea()
 {
 	TriangleMesh* tm = dynamic_cast<TriangleMesh*>(sel);

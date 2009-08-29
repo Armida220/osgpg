@@ -35,7 +35,13 @@ namespace FC {
 
 	typedef unsigned int Uint;
 
-	CALIBRATE_API void calibrate(K_Matrix k, Uint correspondentNum,
+	//x0, y0, z0, phi0, omega0, kappa0
+	typedef double InitParameters[6];
+
+	//init parameter is in photogrammetry system
+	//calibrate system is in computer vision system
+	CALIBRATE_API void calibrate(InitParameters init, 
+		K_Matrix k, Uint correspondentNum,
 		ImagePointArr imgPts, WorldPointArr wldPts,
 		R_Matrix& r_out, C_Matrix& c_out, PrincipleAxis& pa_out, P_Matrix& p_out);
 }

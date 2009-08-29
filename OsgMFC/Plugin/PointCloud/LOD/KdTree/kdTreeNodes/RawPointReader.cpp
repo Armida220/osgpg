@@ -26,17 +26,23 @@ bool RawPointReader::Init(const char* fileName, unsigned int &recordType)
 		return false;
 	}
 	unsigned int pointNum = 0;
-	inFile >> pointNum;
-
 	double x,y,z;
 	double I;
 	double r,g,b;
 	int flag=0;
 
 	//try
+	x=y=z=I=r=g=b=-1;
 	string str;
+	getline(inFile, str, '\n');
+	sscanf(str.c_str(), "%lf %lf %lf %lf %lf %lf %lf", &x, &y, &z, &I, &r, &g, &b);
+	if(y==z && z==I && I==r && r==g && g==b && b==-1) {
+		pointNum = unsigned int (x);
+	} else {
+		pointNum = 0; //unknown num of points
+	}
+	
 	I = r = g = b = -1;
-	getline(inFile, str, '\n');//read the first line of num of point
 	getline(inFile, str, '\n');
 	sscanf(str.c_str(), "%lf %lf %lf %lf %lf %lf %lf", &x, &y, &z, &I, &r, &g, &b);
 
@@ -61,11 +67,12 @@ bool RawPointReader::Init(const char* fileName, unsigned int &recordType)
 	if(_readStrategy)
 		delete _readStrategy;
 
-	//点数超过阈值则使用内存映射模式
-	if(pointNum<MEM_MAP_THRESHOLD)
+	if(pointNum==0)
+		_readStrategy = new UnknownNumStrategy;
+	else if(pointNum<MEM_MAP_THRESHOLD)
 		_readStrategy = new SimpleReadStrategy;
 	else
-		_readStrategy = new MemMapStrategy;
+		_readStrategy = new MemMapStrategy;			//点数超过阈值则使用内存映射模式
 
 	return _readStrategy->Init(fileName, recordType);
 }

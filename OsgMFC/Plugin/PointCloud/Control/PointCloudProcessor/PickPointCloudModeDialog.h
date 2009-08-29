@@ -24,4 +24,5 @@ public:
 	afx_msg void OnBnClickedButtonPickPointcloud();
 	float m_triangleArea;
 	afx_msg void OnBnClickedButtonTriarea();
+	afx_msg void OnBnClickedButtonGetsignedpoints();
 };

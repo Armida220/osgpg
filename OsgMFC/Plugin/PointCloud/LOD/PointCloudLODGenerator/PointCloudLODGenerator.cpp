@@ -84,14 +84,20 @@ namespace FC {
 		}
 		CString strSaveFileName = saveDlg.GetPathName();
 
-		
+#ifndef _DEBUG
+		AFX_MANAGE_STATE(AfxGetStaticModuleState());
+#endif
 		AfxMessageBox("第三步，设置参数");
 		LODParaSetter setter;
-		float sampleRatio=0.1;
-		unsigned int targetNumOnLeaf = 100;
+		float sampleRatio=0.001;
+		unsigned int targetNumOnLeaf = 10000;
+		double maxVisibleRange=800;
+		double minVisibleRange=100;
 		if(setter.DoModal()==IDOK) {
 			sampleRatio = setter.m_sampleRatio;
 			targetNumOnLeaf = setter.m_targetNumOnLeaf;
+			maxVisibleRange = setter.maxBoundVisibleRange;
+			minVisibleRange = setter.minBoundVisibleRange;
 		}
 
 		AfxMessageBox("第三步：读取点云文件并进行转换，请耐心等待...");
@@ -100,7 +106,8 @@ namespace FC {
 
 		CString cmd = "PointsDividor.exe";
 		CString par;
-		par.Format("\"%s\"  \"%s\"", strFileName, strSaveFileName);
+		par.Format("\"%s\" \"%s\" %d %f %d %lf", strFileName, strSaveFileName, 
+			16, sampleRatio, targetNumOnLeaf, maxVisibleRange, minVisibleRange);
 		//AfxMessageBox(par);
 		SHELLEXECUTEINFO shellinfo = runConsole(cmd, par);
 
@@ -110,7 +117,7 @@ namespace FC {
 		}
 
 #ifndef _DEBUG
-		AFX_MANAGE_STATE(AfxGetStaticModuleState());
+		//AFX_MANAGE_STATE(AfxGetStaticModuleState());
 		CWaitDialog* pWaitDlg = new CWaitDialog;
 		pWaitDlg->Create(IDD_DIALOG_WAIT, NULL);
 		pWaitDlg->ShowWindow(SW_SHOW);

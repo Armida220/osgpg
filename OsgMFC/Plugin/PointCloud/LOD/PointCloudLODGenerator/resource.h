@@ -3,12 +3,14 @@
 // Used by PointCloudLODGenerator.rc
 //
 #define IDD_DIALOG_WAIT                 101
-#define IDD_DIALOG1                     102
 #define IDD_DIALOG_LOD_PARA             102
 #define IDS_APP_TITLE                   103
 #define IDC_EDIT_SAMPLE                 1000
 #define IDC_PROGRESS_READER             1001
 #define IDC_EDIT_TARGET                 1001
+#define IDC_EDIT_MAXBOUNDVISIBLERANGLE  1002
+#define IDC_EDIT_INITVISIBLERANGE2      1003
+#define IDC_EDIT_MINBOUNDVISIBLERANGE   1003
 
 // Next default values for new objects
 // 

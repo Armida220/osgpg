@@ -58,15 +58,14 @@ bool PointSetDividor::Process(BuildParameters bp /* = BuildParameters */)
 		_log <<"Writing pagedLod File : "<<saveLodFullName<<endl;
 
 		osg::ref_ptr<osg::PagedLOD> plod = new osg::PagedLOD;
+		plod->setRangeMode(osg::LOD::PIXEL_SIZE_ON_SCREEN);
 		plod->setCenter(lodRoot->getCenter());
 		plod->setRadius(lodRoot->getRadius());
 		plod->setFileName(0, string(lodSaveName));
-		plod->setRange(0, 0, lodRoot->getRadius()*2);
+		plod->setRange(0, bp._maxBoundVisibleRange, FLT_MAX);
 		_root->addChild(plod.get());
-		//_root->addChild(lodRoot.get());
 
 		_pointSet.clear();//ATTENTION clear the point set
-		//lodRoot = 0;
 	}
 	_log<<"Generate Complete!"<<endl;
 

@@ -42,6 +42,8 @@ protected:
 	virtual BOOL CreateClient(LPCREATESTRUCT lpCreateStruct, CMenu* pWindowMenu);
 public:
 	afx_msg void OnDestroy();
+	afx_msg void OnConsoleShowconsole();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 

@@ -13,6 +13,8 @@
 #define IDB_SPLASH                      137
 #define IDB_BITMAP1                     140
 #define IDB_BITMAP_BG                   140
+#define IDD_DIALOG_CONSOLE              141
+#define IDC_RICHEDIT21                  1000
 #define ID_32771                        32771
 #define ID_LOAD_WORKFLOW_PLUGIN         32772
 #define ID_32773                        32773
@@ -26,14 +28,18 @@
 #define ID_FILE_ADDNEW                  32781
 #define ID_32782                        32782
 #define ID_ADD_CONTROLLER_PLUGIN        32783
+#define ID_TEST_SHOWCONSOLE             32784
+#define ID_CONSOLE_SHOWCONSOLE          32785
+#define ID_32786                        32786
+#define ID_Test                         32787
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        141
-#define _APS_NEXT_COMMAND_VALUE         32784
-#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_RESOURCE_VALUE        142
+#define _APS_NEXT_COMMAND_VALUE         32788
+#define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

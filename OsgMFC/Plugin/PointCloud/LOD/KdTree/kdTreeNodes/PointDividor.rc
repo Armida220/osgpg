@@ -70,7 +70,7 @@ BEGIN
         BLOCK "080404b0"
         BEGIN
             VALUE "Comments", "该程序由PointCloudLODGenerator调用，生成LOD"
-            VALUE "CompanyName", "武汉大学测绘学院 冯晨"
+            VALUE "CompanyName", "武汉大学测绘学院"
             VALUE "FileDescription", "该程序由PointCloudLODGenerator调用，生成LOD"
             VALUE "FileVersion", "1, 0, 0, 1"
             VALUE "InternalName", "PointDividor"
@@ -94,7 +94,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_ICON1               ICON                    "D:\\0-osgPG\\osgPG\\OsgMFC\\18.ico"
+IDI_ICON1               ICON                    "D:\\0-osgPG\\osgFrameWork\\OsgMFC\\18.ico"
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 

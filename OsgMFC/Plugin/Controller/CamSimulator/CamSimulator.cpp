@@ -28,6 +28,7 @@
 #include <osgViewer/api/win32/GraphicsWindowWin32>
 #include "CamCalibrator.h"
 #include "CamParameters.h"
+#include "PixelGetter.h"
 #include <iostream>
 using namespace std;
 
@@ -62,6 +63,41 @@ void ReadCamList(CamList& cl, std::ifstream& camsFile)
 
 void ResetCamera(osg::Camera* cam, double depth, FC::CamParameters& cp);
 
+class ColorResetter : public osg::NodeVisitor
+{
+public:
+	FC::CamParameters& _cp;
+	ColorResetter(FC::CamParameters& cp) : _cp(cp) {
+		setTraversalMode(osg::NodeVisitor::TRAVERSE_ALL_CHILDREN);
+		_cp.pg.Load(_cp.photoPath.c_str());
+	}
+
+	virtual void apply(osg::Geode& node)
+	{
+		for(unsigned int j=0; j<node.getNumDrawables(); ++j) {
+			osg::Geometry* geom = node.getDrawable(j)->asGeometry();
+			if(geom) {
+				osg::Vec3Array* v3a = 
+					dynamic_cast<osg::Vec3Array*>(geom->getVertexArray());
+				if(v3a) {
+					geom->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
+					osg::ref_ptr<osg::Vec4Array> v4a = new osg::Vec4Array(v3a->size());
+					//	dynamic_cast<osg::Vec4Array*>(geom->getColorArray());
+					for(unsigned int i=0; i<v3a->size(); ++i) {
+						osg::Vec3& v3 = v3a->at(i);
+						double u,v;
+						_cp.project(v3.x(), v3.y(), v3.z(), u, v);
+						osg::Vec4& v4 = v4a->at(i);
+						_cp.pg.GetPixel(u,v,v4);
+					}
+					v4a->dirty();
+					geom->setColorArray(v4a);
+				}
+			}
+		}
+	}
+};
+
 class LensController : public osgGA::GUIEventHandler
 {
 	CamList _cl;
@@ -76,9 +112,9 @@ class LensController : public osgGA::GUIEventHandler
 	void PreCam() { if(_curC==_cl.begin()) _curC=_cl.end(); _curC--; }
 
 public:
-	//bool g_flag;
+	osg::ref_ptr<osg::Node> scenePoints;
 	double depth;
-	LensController() { /*g_flag = true;*/ }
+	LensController() {}
 	void SetCameraToControl(osg::Camera* cam) { _cam = cam; }
 	void SetLensRoot(osg::Group* root) { lensRoot = root; }
 	CamList& GetCamList() { return _cl; }
@@ -146,8 +182,10 @@ public:
 				lensRoot->replaceChild(lensRoot->getChild(1),
 					_curC->photoNode);
 			}
-			//if(ea.getKey()=='y') { g_flag = true; }
-			//if(ea.getKey()=='u') { g_flag = false; }
+			if(ea.getKey()=='p') {
+				ColorResetter cr(_curC->cp);
+				scenePoints->accept(cr);
+			}
 			return true;
 		}
 		return false;
@@ -366,8 +404,8 @@ namespace FC {
 			viewer->getView(0)->getSceneData()->asGroup();
 
 		//1. add axes
-		osg::Node* axes = osgDB::readNodeFile(string("axes.osg"));
-		root0->addChild( axes );
+		//osg::Node* axes = osgDB::readNodeFile(string("axes.osg"));
+		//root0->addChild( axes );
 		root0->getOrCreateStateSet()->setMode( GL_LIGHTING, osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE );
 
 		//2. add point cloud
@@ -441,6 +479,7 @@ namespace FC {
 			}
 			//////////////////////////////////////////////////////////////////////////
 			osg::Group* root1 = view->getSceneData()->asGroup();
+			lensCtrl->scenePoints = scenePoints;
 			lensCtrl->SetLensRoot(root1);
 			root1->addChild(scenePoints);			//child 0
 			cItr = lensCtrl->FirstCam();

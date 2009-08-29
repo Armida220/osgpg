@@ -39,7 +39,7 @@
 			<DebugSettings
 				Command="$(TargetPath)"
 				WorkingDirectory="K:\osg2.8_float\bin"
-				CommandArguments=""
+				CommandArguments="ShowConsole"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"

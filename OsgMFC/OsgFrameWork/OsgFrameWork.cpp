@@ -9,6 +9,8 @@
 #include "OsgFrameWorkDoc.h"
 #include "OsgFrameWorkView.h"
 
+#include "Console.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -105,7 +107,19 @@ BOOL COsgFrameWorkApp::InitInstance()
 	CCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
-	if (!m_lpCmdLine || CString(m_lpCmdLine).IsEmpty())
+	if(cmdInfo.m_strFileName.Find("ShowConsole")!=-1) {
+#define ALLOCATE_CONSOLE 1
+#if ALLOCATE_CONSOLE
+		Console::Instance()->ShowConsole(true);
+#endif
+	} else {
+#define ALLOCATE_CONSOLE 1
+#if ALLOCATE_CONSOLE
+		Console::Instance()->ShowConsole(false);
+#endif
+	}
+
+	//if (!m_lpCmdLine || CString(m_lpCmdLine).IsEmpty())
 	{
 		cmdInfo.m_nShellCommand = CCommandLineInfo::FileNothing ; // close first window
 	}
@@ -175,6 +189,11 @@ void COsgFrameWorkApp::OnFileOpen()
 }
 int COsgFrameWorkApp::ExitInstance()
 {
+
+#if ALLOCATE_CONSOLE
+	Console::Destroy();
+#endif
+
 	CloseHandle(m_hMutex);
 
 	return CWinApp::ExitInstance();

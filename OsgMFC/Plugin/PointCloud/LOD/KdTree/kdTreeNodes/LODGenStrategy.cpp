@@ -13,9 +13,55 @@ using namespace std;
 
 using namespace FC;
 
+#define SEE_BOUND 0
+
 //////////////////////////////////////////////////////////////////////////
 //										Global
 //////////////////////////////////////////////////////////////////////////
+class LODRangeSetter : public osg::NodeVisitor
+{
+public:
+	LODRangeSetter() 
+	{ setTraversalMode(osg::NodeVisitor::TRAVERSE_ALL_CHILDREN); }
+
+	double _maxBoundRadius;
+	double _minBoundRadius;
+
+	double _maxBoundVisibleRange;
+	double _minBoundVisibleRange;
+
+	virtual void apply(osg::LOD& node)
+	{
+		if(node.getNumChildren()>=3) {
+			for(int i=0; i<node.getNumChildren(); ++i) {
+				double r = BoundRadius2BoundVisibleRange(
+					node.getChild(i)->getBound().radius());
+#if SEE_BOUND
+				node.setRange(i, 0, r);
+#else
+				node.setRange(i, r, FLT_MAX);
+#endif
+			}
+		}
+		traverse(node);
+	}
+
+	void calcPara()
+	{
+		paraA = 
+			(_maxBoundVisibleRange-_minBoundVisibleRange
+			)/(_maxBoundRadius-_minBoundRadius);
+		paraB =
+			(_minBoundVisibleRange - paraA*_minBoundRadius);
+	}
+protected:
+	double paraA, paraB;
+
+	inline double BoundRadius2BoundVisibleRange(double boundRadius)
+	{
+		return boundRadius*paraA + paraB;
+	}
+};
 int findMaxAxis(osg::BoundingBox bb)
 {
 	int axis = -1;
@@ -48,9 +94,11 @@ osg::Geode* makePointsInOneNode(PointSet& points, PointIdxSet& pis,
 
 	osg::Geode *geode = new osg::Geode;
 
-#ifdef _DEBUG
-	osg::Box* box = new osg::Box(bb.center(), bb.xMax()-bb.xMin(),
-		bb.yMax()-bb.yMin(), bb.zMax()-bb.zMin());
+#if SEE_BOUND
+	osg::Sphere* box = new osg::Sphere(bb.center(), bb.radius()/*
+		bb.xMax()-bb.xMin(),
+				bb.yMax()-bb.yMin(), bb.zMax()-bb.zMin()*/
+		);
 	osg::ShapeDrawable* sd = new osg::ShapeDrawable(box);
 	sd->setColor(osg::Vec4(rand()%100/100.0, rand()%100/100.0, rand()%100/100.0,0.8));
 	geode->addDrawable(sd);
@@ -166,10 +214,10 @@ bool SampleKdTreeGenStrategy::Generate(PointSet &pointSet,
 
 	PointIdxSet pis;
 	pis.reserve(pointSet.size());
-	for(PointIdx i = 0;//pointSet.begin(); 
-		i<pointSet.size(); ++i)//i!=pointSet.end(); ++i)
+	for(PointIdx i = 0;
+		i<pointSet.size(); ++i)
 	{
-		PointRec& p = pointSet[i];//(*i);
+		PointRec& p = pointSet[i];
 		pis.push_back(i);
 		bb.expandBy(p.x, p.y, p.z);
 	}
@@ -180,7 +228,17 @@ bool SampleKdTreeGenStrategy::Generate(PointSet &pointSet,
 	}
 
 	try {
+		_maxBoundRadius = bb.radius();
+		_minBoundRadius = _maxBoundRadius;
 		BuildKdTree(pis, bb, 0, root);
+		//set lod range
+		LODRangeSetter lrs;
+		lrs._maxBoundRadius = _maxBoundRadius;
+		lrs._minBoundRadius = _minBoundRadius;
+		lrs._maxBoundVisibleRange = _bp._maxBoundVisibleRange;
+		lrs._minBoundVisibleRange = _bp._minBoundVisibleRange;
+		lrs.calcPara();
+		root->accept(lrs);
 	} catch (...) {
 		_log<<"Build Kd tree Error!"<<endl;
 		_points = 0;
@@ -201,6 +259,7 @@ void SampleKdTreeGenStrategy::BuildKdTree(PointIdxSet &pis, osg::BoundingBox bb,
 {
 	root->setCenter(bb.center());
 	root->setRadius(bb.radius());
+	root->setRangeMode(osg::LOD::PIXEL_SIZE_ON_SCREEN);
 
 	if(level >= _bp._maxLevels ||
 		pis.size() <= _bp._targetPointsNumOnLeaf)
@@ -211,14 +270,14 @@ void SampleKdTreeGenStrategy::BuildKdTree(PointIdxSet &pis, osg::BoundingBox bb,
 #endif
 		//build self
 		{
-			_log<<"RecordType: "<<_bp._recordType<<endl;
-			osg::Geode* gd = makePointsInOneNode(*_points ,pis, bb, _bp._recordType);
+			osg::Geode* gd = 
+				makePointsInOneNode(*_points ,pis, bb, _bp._recordType);
 			if(gd)
-#ifdef _DEBUG
-				root->addChild( gd, bb.radius()*10, FLT_MAX);
-#else
-				root->addChild( gd, 0, bb.radius()*20);
-#endif
+				root->addChild(gd);
+
+			double r = bb.radius();
+			_maxBoundRadius = max(_maxBoundRadius, r);
+			_minBoundRadius = min(_minBoundRadius, r);
 		}
 
 		//ATTENTION! we clear pis here, for it has no use anymore
@@ -258,7 +317,7 @@ void SampleKdTreeGenStrategy::BuildKdTree(PointIdxSet &pis, osg::BoundingBox bb,
 	for(PointIdxSet::iterator pi=pis.begin();
 		pi!=pis.end(); ++pi, --cnt)
 	{
-		PointRec& p = _points->at(*pi);//*(*pi);
+		PointRec& p = _points->at(*pi);
 
 		if(needSample && cnt==0) {
 			selfPis.push_back( (*pi) );
@@ -275,47 +334,48 @@ void SampleKdTreeGenStrategy::BuildKdTree(PointIdxSet &pis, osg::BoundingBox bb,
 	//ATTENTION! we clear pis here, for it has no use anymore
 	pis.clear();
 
-	//build self
+	//build self, rough-level
 	{
 #if DRAW_TREE_IN_LOG
 		printTab(level+1, _log);
 		_log<<"Self Sample : points num = " << selfPis.size() <<endl;
 #endif
 
-		osg::Geode* gd = makePointsInOneNode(*_points, selfPis, bb, _bp._recordType);
+		osg::Geode* gd = 
+			makePointsInOneNode(*_points, selfPis, bb, _bp._recordType);
 		if(gd)
-#ifdef _DEBUG
-			root->addChild( gd, bb.radius()*10, FLT_MAX);
-#else
-			root->addChild( gd, 0, bb.radius()*10);
-#endif
+			root->addChild(gd);
 
 		selfPis.clear();
+
+		double r = bb.radius();
+		_maxBoundRadius = max(_maxBoundRadius, r);
+		_minBoundRadius = min(_minBoundRadius, r);
 	}
 
-	//build child
+	//build child, detail-level
 	{
 		osg::ref_ptr<osg::LOD> lcRoot = new osg::LOD;
 		BuildKdTree(leftPis, leftbb, level+1, lcRoot);
 		if(lcRoot->getNumChildren()>0)
-#ifdef _DEBUG
-			root->addChild( lcRoot.get(), leftbb.radius()*5, FLT_MAX );
-#else
-			root->addChild( lcRoot.get(), 0, leftbb.radius()*10 );
-#endif
+			root->addChild(lcRoot.get());
 
 		leftPis.clear();
+
+		double r = leftbb.radius();
+		_maxBoundRadius = max(_maxBoundRadius, r);
+		_minBoundRadius = min(_minBoundRadius, r);
 
 		osg::ref_ptr<osg::LOD> rcRoot = new osg::LOD;
 		BuildKdTree(rightPis, rightbb, level+1, rcRoot);
 		if(rcRoot->getNumChildren()>0)
-#ifdef _DEBUG
-			root->addChild( rcRoot.get(), rightbb.radius()*5, FLT_MAX );
-#else
-			root->addChild( rcRoot.get(), 0, rightbb.radius()*10 );
-#endif
+			root->addChild(rcRoot.get());
 
 		rightPis.clear();
+
+		r = rightbb.radius();
+		_maxBoundRadius = max(_maxBoundRadius, r);
+		_minBoundRadius = min(_minBoundRadius, r);
 	}
 
 #if DRAW_TREE_IN_LOG
@@ -323,3 +383,6 @@ void SampleKdTreeGenStrategy::BuildKdTree(PointIdxSet &pis, osg::BoundingBox bb,
 	_log<<"}"<<endl;
 #endif
 }
+
+#undef SEE_BOUND
+#undef DRAW_TREE_IN_LOG

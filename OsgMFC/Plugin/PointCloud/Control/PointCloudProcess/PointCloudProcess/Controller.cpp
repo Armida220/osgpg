@@ -68,7 +68,6 @@ void Controller::SetCurID(unsigned int id)
 	LabelPointImpl* Impl = dynamic_cast<LabelPointImpl*>(_ctrlImplList[LABEL_POINT-1].get());
 	log<<"Set Current Label ID = "<<id<<endl;
 	Impl->SetCurID(id);
-	log<<"########################"<<endl<<endl;
 }
 //////////////////////////////////////////////////////////////////////////
 //				invoke	Pick Point Cloud Impl
@@ -78,7 +77,6 @@ bool Controller::SetColorPerVertex(osg::Vec4Array& colors)
 	PickPointCloudImpl* Impl = dynamic_cast<PickPointCloudImpl*>(_ctrlImplList[PICK_POINT_CLOUD-1].get());
 	log<<"Set Color Per Vertex"<<endl;
 	return Impl->SetColorPerVertex(colors);
-	log<<"########################"<<endl<<endl;
 }
 
 osg::ref_ptr<osg::Vec3Array> Controller::GetTransformedPoints()
@@ -86,7 +84,13 @@ osg::ref_ptr<osg::Vec3Array> Controller::GetTransformedPoints()
 	PickPointCloudImpl* Impl = dynamic_cast<PickPointCloudImpl*>(_ctrlImplList[PICK_POINT_CLOUD-1].get());
 	log<<"Get Transformed Points"<<endl;
 	return Impl->GetTransformedPoints();
-	log<<"########################"<<endl<<endl;
+}
+
+osg::ref_ptr<osg::Vec3Array> Controller::GetSignedPoints()
+{
+	PickPointCloudImpl* Impl = dynamic_cast<PickPointCloudImpl*>(_ctrlImplList[PICK_POINT_CLOUD-1].get());
+	log<<"Get Signed Points"<<endl;
+	return Impl->GetSignedPoints();
 }
 
 double Controller::GetTriangleArea()
@@ -94,7 +98,6 @@ double Controller::GetTriangleArea()
 	PickPointCloudImpl* Impl = dynamic_cast<PickPointCloudImpl*>(_ctrlImplList[PICK_POINT_CLOUD-1].get());
 	log<<"Get Triangle Area"<<endl;
 	return Impl->GetTriangleArea();
-	log<<"########################"<<endl<<endl;
 }
 
 osg::Vec3Array* Controller::GetVertexArray()
@@ -102,7 +105,6 @@ osg::Vec3Array* Controller::GetVertexArray()
 	PickPointCloudImpl* Impl = dynamic_cast<PickPointCloudImpl*>(_ctrlImplList[PICK_POINT_CLOUD-1].get());
 	log<<"Get Non-transformed Vertex Array"<<endl;
 	return Impl->GetVertexArray();
-	log<<"########################"<<endl<<endl;
 }
 
 bool Controller::SetTexture(osg::Vec2Array& textureCoords, string textureName)
@@ -110,7 +112,6 @@ bool Controller::SetTexture(osg::Vec2Array& textureCoords, string textureName)
 	PickPointCloudImpl* Impl = dynamic_cast<PickPointCloudImpl*>(_ctrlImplList[PICK_POINT_CLOUD-1].get());
 	log<<"Set Texture = "<<textureName<<endl;
 	return Impl->SetTexture(textureCoords, textureName);
-	log<<"########################"<<endl<<endl;
 }
 
 const vector<osg::DrawElementsUInt*>* Controller::GetTriangleArray()
@@ -118,7 +119,6 @@ const vector<osg::DrawElementsUInt*>* Controller::GetTriangleArray()
 	PickPointCloudImpl* Impl = dynamic_cast<PickPointCloudImpl*>(_ctrlImplList[PICK_POINT_CLOUD-1].get());
 	log<<"Get Triangle Array"<<endl;
 	return Impl->GetTriangleArray();
-	log<<"########################"<<endl<<endl;
 }
 //////////////////////////////////////////////////////////////////////////
 //				invoke	Pick Triangle Impl
@@ -128,7 +128,6 @@ const Triangle& Controller::GetTriangle()
 	PickTriangleImpl* Impl = dynamic_cast<PickTriangleImpl*>(_ctrlImplList[PICK_TRIANGLE-1].get());
 	log<<"Get Picked Triangle Information"<<endl;
 	return Impl->GetTriangle();
-	log<<"########################"<<endl<<endl;
 }
 //////////////////////////////////////////////////////////////////////////
 //				invoke	Drag Impl
@@ -143,14 +142,12 @@ void Controller::SetDragMode(unsigned int m)
 	DragImpl* Impl = dynamic_cast<DragImpl*>(_ctrlImplList[DRAG-1].get());
 	log<<"Set Drag Mode : "<<(m==Controller::BEGIN?"BEGIN":"FINISH")<<endl;
 	Impl->SetDragMode(m);
-	log<<"########################"<<endl<<endl;
 }
 void Controller::undo()
 {
 	DragImpl* Impl = dynamic_cast<DragImpl*>(_ctrlImplList[DRAG-1].get());
 	if(Impl->undo()) {
 		log<<"Drag Undo"<<endl;
-		log<<"########################"<<endl<<endl;
 	}
 }
 void Controller::redo()

@@ -23,20 +23,25 @@ namespace FC {
 		};
 		BuildParameters(unsigned int maxLevel=32, 
 			unsigned int targetPointsNumOnLeaf=20, 
-			float sampleRatio=0.01, unsigned int genType = SAMPLE_KDTREE,
-			unsigned int recordType = XYZ)
+			float sampleRatio=0.01, 
+			double maxBoundVisibleRange=800, double minBoundVisibleRange=100,
+			unsigned int genType = SAMPLE_KDTREE,	unsigned int recordType = XYZ)
 		{
 			_maxLevels = maxLevel;
 			_targetPointsNumOnLeaf = targetPointsNumOnLeaf;
 			_sampleRatio = sampleRatio;
 			_genType = genType;
 			_recordType = recordType;
+			_maxBoundVisibleRange = maxBoundVisibleRange;
+			_minBoundVisibleRange = minBoundVisibleRange;
 		}
 		unsigned int	_maxLevels;
 		unsigned int	_targetPointsNumOnLeaf;
 		float					_sampleRatio;
 		unsigned int	_genType;
 		unsigned int	_recordType;
+		double				_maxBoundVisibleRange;
+		double				_minBoundVisibleRange;
 	};
 
 	class PointSetDividor

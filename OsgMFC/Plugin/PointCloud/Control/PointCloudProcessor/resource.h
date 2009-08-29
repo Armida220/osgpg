@@ -44,6 +44,8 @@
 #define IDC_BUTTON1                     1037
 #define IDC_BUTTON_TRIAREA              1037
 #define IDC_EDIT_TRIANGLE_AREA          1038
+#define IDC_BUTTON2                     1039
+#define IDC_BUTTON_GETSIGNEDPOINTS      1039
 
 // Next default values for new objects
 // 
@@ -51,7 +53,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        109
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1039
+#define _APS_NEXT_CONTROL_VALUE         1040
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -31,6 +31,7 @@ void PickPointCloudModeDialog::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(PickPointCloudModeDialog, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTON_PICK_POINTCLOUD, &PickPointCloudModeDialog::OnBnClickedButtonPickPointcloud)
 	ON_BN_CLICKED(IDC_BUTTON_TRIAREA, &PickPointCloudModeDialog::OnBnClickedButtonTriarea)
+	ON_BN_CLICKED(IDC_BUTTON_GETSIGNEDPOINTS, &PickPointCloudModeDialog::OnBnClickedButtonGetsignedpoints)
 END_MESSAGE_MAP()
 
 
@@ -50,4 +51,34 @@ void PickPointCloudModeDialog::OnBnClickedButtonTriarea()
 	}
 	m_triangleArea = area;
 	UpdateData(FALSE);
+}
+
+void PickPointCloudModeDialog::OnBnClickedButtonGetsignedpoints()
+{
+	osg::ref_ptr<osg::Vec3Array> signedPoints = ctrl->GetSignedPoints();
+	if(!signedPoints.valid()) {
+		AfxMessageBox("当前点云没有标记点或您未选中点云！");
+		return;
+	}
+
+	AfxMessageBox("请选择保存路径");
+
+	CFileDialog dlg(TRUE, "选择文件", NULL, 0, "All(*.*)|*.*|");
+	if(dlg.DoModal()!=IDOK) {
+		AfxMessageBox("未选择保存路径！");
+		return;
+	}
+	CString name = dlg.GetPathName();
+
+	setlocale(LC_ALL, "chs");
+	std::ofstream out(string(name).c_str());
+
+	for(unsigned int i=0; i<signedPoints->size(); ++i) {
+		osg::Vec3& pt = signedPoints->at(i);
+		out<<pt.x()<<" "<<pt.y()<<" "<<pt.z()<<endl;
+	}
+
+	out.close();
+
+	AfxMessageBox("保存成功！");
 }

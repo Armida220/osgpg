@@ -15,21 +15,11 @@ using namespace FC;
 //	void getLine(string&, char)
 
 template<class Inputor>
-unsigned int ReadHeadConcept(Inputor& in)
-{
-	string str;
-	unsigned int num = 0;
-	in.getLine(str, '\n');
-	sscanf(str.c_str(), "%u", &num);
-	return num;
-}
-
-template<class Inputor>
 void ReadConcept(Inputor& in, PointSet &pointSet, 
-								 unsigned int recordType, unsigned int num)
+								 unsigned int recordType)
 {
 	string str;
-	pointSet.reserve(num);
+	pointSet.reserve(in._num);
 	double x,y,z;
 	double I;
 	double r,g,b;
@@ -61,16 +51,28 @@ void ReadConcept(Inputor& in, PointSet &pointSet,
 		PointRec::Update_I(I);
 		break;
 		}
-	}while(--num);
+		in.frame();
+	}while(!in.isEnd());
 }
 
 //////////////////////////////////////////////////////////////////////////
 //							SimpleReadStrategy
 //////////////////////////////////////////////////////////////////////////
 struct SimpleInputor {
+	int _num;
 	SimpleInputor(std::ifstream& file) : infile(file) {}
 	std::ifstream& infile;
-	void getLine(string& str, char c) { str.clear(); getline(infile, str, c); }
+	inline void getLine(string& str, char c) { str.clear(); getline(infile, str, c); }
+	inline void frame() { --_num; }
+	inline bool isEnd() { return _num<=0 || !infile; }
+	inline void ReadHead()
+	{
+		string str;
+		unsigned int num = 0;
+		getLine(str, '\n');
+		sscanf(str.c_str(), "%u", &num);
+		_num=num;
+	}
 };
 
 bool SimpleReadStrategy::Init(const char* fileName, unsigned int recordType)
@@ -101,8 +103,8 @@ bool SimpleReadStrategy::Read(PointSet &pointSet)
 	_log<<"Begin to read data."<<endl;
 
 	SimpleInputor inputor(infile);
-	unsigned int num = ReadHeadConcept(inputor);
-	ReadConcept(inputor, pointSet, _recordType, num);
+	inputor.ReadHead();
+	ReadConcept(inputor, pointSet, _recordType);
 	infile.close();
 
 	//inputor.infile.close();
@@ -134,6 +136,7 @@ namespace FC {
 		char *p;
 		char *pEnd;
 	public:
+		int _num;
 		MemMapInputor() { pvFile=p=0; hFile=hMapFile=0; }
 		bool init(const char *name)
 		{
@@ -193,6 +196,10 @@ namespace FC {
 			while(p<=pEnd && *p==c) ++p;//skip all forward c
 			while(p<=pEnd && *p!=c) { str.push_back(*p++); }
 		}
+
+		inline void frame() { --_num; }
+		inline bool isEnd() { return !(p<=pEnd && _num>0); }
+		inline bool reachFileEnd() { return p>pEnd; }
 	};
 }
 
@@ -209,7 +216,11 @@ bool MemMapStrategy::Init(const char* fileName, unsigned int recordType)
 	_log << "Map-Time: "<<difftime(eT, sT)<<endl;
 
 	if(ret) {
-		_numOfPointsToRead = ReadHeadConcept(*inputor);
+		string str;
+		unsigned int num = 0;
+		inputor->getLine(str, '\n');
+		sscanf(str.c_str(), "%u", &num);
+		_numOfPointsToRead = num;
 	}
 
 	return ret;
@@ -233,7 +244,8 @@ bool MemMapStrategy::Read(PointSet &pointSet)
 
 	time_t sT, eT;
 	sT = clock();
-	ReadConcept(*inputor, pointSet, _recordType, thisTimeToRead);
+	inputor->_num = thisTimeToRead;
+	ReadConcept(*inputor, pointSet, _recordType);
 	eT = clock();
 	_log << "Read "<< pointSet.size() <<" points, Time : "<<difftime(eT, sT)<<endl;
 
@@ -247,6 +259,56 @@ bool MemMapStrategy::Read(PointSet &pointSet)
 }
 
 void MemMapStrategy::Close()
+{
+	if(inputor) {
+		inputor->close();
+		delete inputor;
+		inputor = 0;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+//                   UnknownNumStrategy
+//////////////////////////////////////////////////////////////////////////
+bool UnknownNumStrategy::Init(const char *fileName, unsigned int recordType)
+{
+	_recordType = recordType;
+	_isFinish = false;
+
+	inputor = new MemMapInputor;
+	time_t sT, eT;
+	sT = clock();
+	bool ret = inputor->init(fileName);
+	eT = clock();
+	_log << "Map-Time: "<<difftime(eT, sT)<<endl;
+
+	return ret;
+}
+
+bool UnknownNumStrategy::Read(PointSet& pointSet)
+{
+	if(_isFinish)
+		return false;
+
+	unsigned int numLeft;
+	unsigned int thisTimeToRead = MEM_MAP_THRESHOLD;
+
+	time_t sT, eT;
+	sT = clock();
+	inputor->_num = thisTimeToRead;
+	ReadConcept(*inputor, pointSet, _recordType);
+	eT = clock();
+	_log << "Read "<< pointSet.size() <<" points, Time : "<<difftime(eT, sT)<<endl;
+
+	if(inputor->reachFileEnd()) {
+		_log << "Finish Read!"<<endl;
+		_isFinish = true;
+	}
+
+	return true;
+}
+
+void UnknownNumStrategy::Close()
 {
 	if(inputor) {
 		inputor->close();

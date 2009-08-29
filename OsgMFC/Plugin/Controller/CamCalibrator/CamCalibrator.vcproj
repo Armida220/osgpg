@@ -108,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(VXLSRC)/core&quot;;&quot;$(VXLSRC)/vcl&quot;;&quot;$(VXLBIN)/core&quot;;&quot;$(VXLBIN)/vcl&quot;;&quot;$(VXLSRC)/contrib&quot;;&quot;$(VXLSRC)/contrib\gel\mrc&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;CALIBRATE_EXPORTS"
 				RuntimeLibrary="2"
@@ -131,6 +131,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="bgeo.lib vpgl.lib vpgl_algo.lib vpl.lib testlib.lib vnl_io.lib vgl_algo.lib vnl_algo.lib netlib.lib v3p_netlib.lib vgl_io.lib vgl.lib vsl.lib vnl.lib vbl.lib vcl.lib"
 				AdditionalLibraryDirectories="&quot;$(VXLBIN)/lib/release&quot;"
+				GenerateDebugInformation="true"
 			/>
 			<Tool
 				Name="VCALinkTool"

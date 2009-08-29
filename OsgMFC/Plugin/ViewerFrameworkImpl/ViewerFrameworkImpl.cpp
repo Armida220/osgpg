@@ -179,7 +179,7 @@ void ViewerFrameworkImpl::StartRendering()
 	Closed_yet = false;
 	//default view : view 0
 	//Viewer->getView(0)->setSceneData((osg::Node*) Root.get());
-	Viewer->getView(0)->getCameraManipulator()->home(0);
+	Viewer->getView(0)->home();
 	Viewer->realize();
 	Thread = (HANDLE) ::_beginthread(&ViewerFrameworkImpl::DoRendering, 0, (void*)Viewer);
 }

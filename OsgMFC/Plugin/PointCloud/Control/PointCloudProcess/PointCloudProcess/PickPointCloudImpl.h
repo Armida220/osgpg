@@ -14,6 +14,8 @@ public:
 	osg::Vec3Array* GetVertexArray();//not transformed
 	const vector<osg::DrawElementsUInt*>* GetTriangleArray();
 
+	osg::ref_ptr<osg::Vec3Array> GetSignedPoints();
+
 	bool SetTexture(osg::Vec2Array& textureCoords, string textureName);
 
 	bool operator()(const osgGA::GUIEventAdapter& ea, 

@@ -26,6 +26,7 @@ BEGIN_MESSAGE_MAP(COsgFrameWorkDoc, CDocument)
 	//ON_COMMAND(ID_FILE_NEW, &COsgFrameWorkDoc::OnFileOpen)
 	ON_COMMAND(ID_FILE_SAVE, &COsgFrameWorkDoc::OnFileSave)
 	ON_COMMAND(ID_FILE_ADDNEW, &COsgFrameWorkDoc::OnFileAddnew)
+	ON_COMMAND(ID_FILE_SAVE_AS, &COsgFrameWorkDoc::OnFileSaveAs)
 END_MESSAGE_MAP()
 
 
@@ -127,9 +128,6 @@ void COsgFrameWorkDoc::OnFileOpen()
 
 BOOL COsgFrameWorkDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
-	//if (!CDocument::OnOpenDocument(lpszPathName))
-	//	return FALSE;
-
 	CString name(lpszPathName);
 	string ext_ = osgDB::getFileExtension(string(name));
 	CString ext( ext_.c_str() );
@@ -198,4 +196,9 @@ void COsgFrameWorkDoc::OnFileAddnew()
 		AfxMessageBox("¸½¼ÓÎÄµµÊ§°Ü£¡");
 	}
 
+}
+
+void COsgFrameWorkDoc::OnFileSaveAs()
+{
+	OnFileSave();
 }

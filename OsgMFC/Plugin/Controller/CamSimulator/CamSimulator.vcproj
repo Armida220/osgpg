@@ -123,8 +123,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
-				AdditionalIncludeDirectories="&quot;$(OSGHOME)/include&quot;;&quot;$(SolutionDir)Plugin\Controller\CamCalibrator&quot;;&quot;$(SolutionDir)OsgFrameWork&quot;;&quot;$(SolutionDir)Plugin\ViewerFrameworkImpl&quot;"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(CXIMAGE_HOME)&quot;;&quot;$(CXIMAGE_HOME)/cximage&quot;;&quot;$(OSGHOME)/include&quot;;&quot;$(SolutionDir)Plugin\Controller\CamCalibrator&quot;;&quot;$(SolutionDir)OsgFrameWork&quot;;&quot;$(SolutionDir)Plugin\ViewerFrameworkImpl&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CAMSIMULATOR_EXPORTS"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="true"
@@ -144,10 +144,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ViewerFrameworkImpl.lib CamCalibrator.lib OpenThreads.lib osg.lib osgDB.lib osgGA.lib osgUtil.lib osgViewer.lib"
+				AdditionalDependencies="$(CXIMAGE_HOME)/png/Release/png.lib $(CXIMAGE_HOME)/jpeg/Release/jpeg.lib $(CXIMAGE_HOME)/zlib/Release/zlib.lib $(CXIMAGE_HOME)/tiff/Release/tiff.lib $(CXIMAGE_HOME)/j2k/Release/j2k.lib $(CXIMAGE_HOME)/jbig/Release/jbig.lib $(CXIMAGE_HOME)/jasper/Release/jasper.lib $(CXIMAGE_HOME)/cximage/Release/cximage.lib ViewerFrameworkImpl.lib CamCalibrator.lib OpenThreads.lib osg.lib osgDB.lib osgGA.lib osgUtil.lib osgViewer.lib"
 				OutputFile="$(OutDir)/CamSimulator.plugin"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(OSGHOME)/lib&quot;;&quot;$(OutDir)&quot;;"
+				AdditionalLibraryDirectories="&quot;$(CXIMAGE_HOME)&quot;;&quot;$(OSGHOME)/lib&quot;;&quot;$(OutDir)&quot;"
 				IgnoreDefaultLibraryNames="libcmt.lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -197,6 +197,10 @@
 				RelativePath=".\CamSimulator.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\PixelGetter.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -209,6 +213,10 @@
 			</File>
 			<File
 				RelativePath=".\CamSimulator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PixelGetter.h"
 				>
 			</File>
 			<File

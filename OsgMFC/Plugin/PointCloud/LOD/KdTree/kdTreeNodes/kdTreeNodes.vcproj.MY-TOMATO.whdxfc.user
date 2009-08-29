@@ -39,7 +39,7 @@
 			<DebugSettings
 				Command="$(TargetPath)"
 				WorkingDirectory=""
-				CommandArguments="t t"
+				CommandArguments="M:\data\jgt.asc M:\data\new.ive"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"

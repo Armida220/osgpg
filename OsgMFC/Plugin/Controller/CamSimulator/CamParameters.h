@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <list>
+#include "PixelGetter.h"
 using namespace std;
 
 namespace FC {
@@ -31,9 +32,13 @@ namespace FC {
 		int u0,v0;		//principle point
 		int pw,ph;		//photo size
 
+		InitParameters init;
+
 		std::string photoPath;
 
 		bool needReComputeParameters;
+
+		PixelGetter pg;
 
 		//camera file format:
 		//f
@@ -53,7 +58,7 @@ namespace FC {
 
 		inline void computeParameters() {
 			if(needReComputeParameters) {
-				FC::calibrate(k, correspondentNum, image, world, r, c, pa, p);
+				FC::calibrate(init, k, correspondentNum, image, world, r, c, pa, p);
 				needReComputeParameters = false;
 			}
 		}
@@ -62,6 +67,13 @@ namespace FC {
 			eye = osg::Vec3(c[0], c[1], c[2]);
 			look = osg::Vec3(pa[0], pa[1], pa[2]);
 			up = osg::Vec3(-r[1][0], -r[1][1], -r[1][2]);
+		}
+
+		inline void project(double x, double y, double z, double& u, double& v)
+		{
+			double w = p[2][0] * x + p[2][1] * y + p[2][2] * z + p[2][3];
+			u = ( p[0][0] * x + p[0][1] * y + p[0][2] * z + p[0][3] ) / w;
+			v = ( p[1][0] * x + p[1][1] * y + p[1][2] * z + p[1][3] ) / w;
 		}
 		
 		//frustum[6]: near, far, left, right, top, bottom

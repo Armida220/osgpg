@@ -23,4 +23,6 @@ public:
 	float m_sampleRatio;
 	UINT m_targetNumOnLeaf;
 	afx_msg void OnBnClickedOk();
+	double maxBoundVisibleRange;
+	double minBoundVisibleRange;
 };

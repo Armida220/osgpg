@@ -14,6 +14,7 @@ CamParameters::CamParameters(std::ifstream& camFile)
 		ImagePoint& ip = image[i];
 		camFile>>wp[0]>>wp[1]>>wp[2]>>ip[0]>>ip[1];
 	}
+	camFile>>init[0]>>init[1]>>init[2]>>init[3]>>init[4]>>init[5];
 	camFile>>photoPath;
 
 	k[0] = f/dx;
@@ -46,6 +47,12 @@ CamParameters& CamParameters::operator=(const CamParameters& rhs)
 		image[i][0] = rhs.image[i][0];
 		image[i][1] = rhs.image[i][1];
 	}
+	init[0] = rhs.init[0];
+	init[1] = rhs.init[1];
+	init[2] = rhs.init[2];
+	init[3] = rhs.init[3];
+	init[4] = rhs.init[4];
+	init[5] = rhs.init[5];
 	photoPath = rhs.photoPath;
 
 	k[0] = f/dx;

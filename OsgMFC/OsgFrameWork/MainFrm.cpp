@@ -7,6 +7,8 @@
 #include "MainFrm.h"
 #include "SplashDialog.h"
 
+#include "Console.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -19,6 +21,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWnd)
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -49,8 +52,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	dlg->Create(CSplashDialog::IDD,this); //创建对话框
 	dlg->ShowWindow(SW_SHOW); //显示对话框
 	dlg->UpdateWindow();
-	Sleep(1000); //画面显示停留时间，单位为毫秒 
-
+	Sleep(500); //画面显示停留时间，单位为毫秒 
 
 	if (CMDIFrameWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
@@ -76,7 +78,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableDocking(CBRS_ALIGN_ANY);
 	DockControlBar(&m_wndToolBar);
 
-	dlg->DestroyWindow(); //销毁对话框 
+	dlg->DestroyWindow(); //销毁对话框
+
+	this->SetTimer(0, 5000, NULL);
 
 	return 0;
 }
@@ -122,4 +126,65 @@ void CMainFrame::OnDestroy()
 {
 	m_wndMDIClient.UnsubclassWindow();
 	CMDIFrameWnd::OnDestroy();
+}
+void CMainFrame::OnTimer(UINT_PTR nIDEvent)
+{
+#define FC_TESTING 1
+#if FC_TESTING
+	if(nIDEvent==0) {
+		HANDLE hStdout; 
+		SMALL_RECT srctReadRect; 
+		CHAR_INFO* chiBuffer=0;
+		COORD coordBufSize; 
+		COORD coordBufCoord;
+		BOOL fSuccess;
+
+		hStdout = GetStdHandle(STD_OUTPUT_HANDLE); 
+		if (hStdout == INVALID_HANDLE_VALUE) 
+		{
+			printf("CreateConsoleScreenBuffer failed - (%d)\n", GetLastError()); 
+			return;
+		}
+		
+		CONSOLE_SCREEN_BUFFER_INFO screen;
+		::GetConsoleScreenBufferInfo(hStdout, &screen);
+
+		srctReadRect = screen.srWindow;
+
+		coordBufSize.Y = srctReadRect.Bottom + 1;
+		coordBufSize.X = srctReadRect.Right + 1;
+
+		chiBuffer = new CHAR_INFO[coordBufSize.Y * coordBufSize.X];
+
+		coordBufCoord.X = 0; 
+		coordBufCoord.Y = 0; 
+
+		// Copy the block from the screen buffer to the temp. buffer. 
+		fSuccess = ReadConsoleOutput( 
+			hStdout,        // screen buffer to read from 
+			chiBuffer,      // buffer to copy into 
+			coordBufSize,   // col-row size of chiBuffer 
+			coordBufCoord,  // top left dest. cell in chiBuffer 
+			&srctReadRect); // screen buffer source rectangle 
+		if (! fSuccess) 
+		{
+			printf("ReadConsoleOutput failed - (%d)\n", GetLastError()); 
+			return;
+		}
+
+		m_wndMDIClient.consoleOuts.clear();
+		for(int i=0; i<coordBufSize.Y; ++i) {
+			string line;
+			for (int j=0; j<coordBufSize.X; ++j) {
+				line.push_back( chiBuffer[i*coordBufSize.X+j].Char.AsciiChar );
+			}
+			m_wndMDIClient.consoleOuts.push_back(line);
+		}
+		m_wndMDIClient.dirty = true;
+		m_wndMDIClient.UpdateConsoleOuts();
+
+		if(chiBuffer) delete [] chiBuffer;
+	}
+#endif
+	CMDIFrameWnd::OnTimer(nIDEvent);
 }
