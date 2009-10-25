@@ -7,6 +7,7 @@
 #define IDD_SPLASHDIALOG                103
 #define IDR_MAINFRAME                   128
 #define IDR_OsgFrameWorkTYPE            129
+#define IDR_ImageType                   130
 #define IDI_ICON1                       131
 #define IDI_ICON2                       133
 #define IDD_DIALOG_SPLASH               136
@@ -32,13 +33,16 @@
 #define ID_CONSOLE_SHOWCONSOLE          32785
 #define ID_32786                        32786
 #define ID_Test                         32787
+#define ID_Menu                         32788
+#define ID_32789                        32789
+#define ID_OpenImage                    32790
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        142
-#define _APS_NEXT_COMMAND_VALUE         32788
+#define _APS_NEXT_COMMAND_VALUE         32791
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

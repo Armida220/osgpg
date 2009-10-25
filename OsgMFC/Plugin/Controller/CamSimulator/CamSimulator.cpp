@@ -108,8 +108,10 @@ class LensController : public osgGA::GUIEventHandler
 
 	osg::Group* lensRoot;
 
-	void NextCam() { _curC++; if(_curC==_cl.end()) _curC = FirstCam(); }
-	void PreCam() { if(_curC==_cl.begin()) _curC=_cl.end(); _curC--; }
+	void closeCam() { _curC->frustumNode->setNodeMask(0); _curC->photoNode->setNodeMask(0); }
+	void openCam() { _curC->frustumNode->setNodeMask(1); _curC->photoNode->setNodeMask(1); }
+	void NextCam() { closeCam(); _curC++; if(_curC==_cl.end()) _curC = FirstCam(); openCam(); }
+	void PreCam() { closeCam(); if(_curC==_cl.begin()) _curC=_cl.end(); _curC--; openCam(); }
 
 public:
 	osg::ref_ptr<osg::Node> scenePoints;
@@ -243,20 +245,35 @@ makeImageFromCamera( osg::Camera* camera, osg::Image* image)
 		mv = camera->getViewMatrix();
 	}
 
-	const double znear = proj(3,2) / (proj(2,2)-1.0);
+	const double znear = proj(3,2) / (proj(2,2)-1.0) + 1;
 	const double zfar = proj(3,2) / (1.0+proj(2,2)) - 1;
 
+#define SET_IMAGE_AT_NEAR 0
+#if SET_IMAGE_AT_NEAR
+	const double nLeft = znear * (proj(2,0)-1.0) / proj(0,0);
+	const double nRight = znear * (1.0+proj(2,0)) / proj(0,0);
+	const double nTop = znear * (1.0+proj(2,1)) / proj(1,1);
+	const double nBottom = znear * (proj(2,1)-1.0) / proj(1,1);
+#else
 	const double fLeft = zfar * (proj(2,0)-1.0) / proj(0,0);
 	const double fRight = zfar * (1.0+proj(2,0)) / proj(0,0);
 	const double fTop = zfar * (1.0+proj(2,1)) / proj(1,1);
 	const double fBottom = zfar * (proj(2,1)-1.0) / proj(1,1);
+#endif
 
 	osg::Vec3Array* v = new osg::Vec3Array;
 	v->resize( 4 );
+#if SET_IMAGE_AT_NEAR
+	(*v)[0].set( nLeft, nBottom, -znear );
+	(*v)[1].set( nRight, nBottom, -znear );
+	(*v)[2].set( nRight, nTop, -znear );
+	(*v)[3].set( nLeft, nTop, -znear );
+#else
 	(*v)[0].set( fLeft, fBottom, -zfar );
 	(*v)[1].set( fRight, fBottom, -zfar );
 	(*v)[2].set( fRight, fTop, -zfar );
 	(*v)[3].set( fLeft, fTop, -zfar );
+#endif
 
 	osg::Vec2Array* vt = new osg::Vec2Array;
 	vt->resize( 4 );
@@ -404,8 +421,8 @@ namespace FC {
 			viewer->getView(0)->getSceneData()->asGroup();
 
 		//1. add axes
-		//osg::Node* axes = osgDB::readNodeFile(string("axes.osg"));
-		//root0->addChild( axes );
+		osg::Node* axes = osgDB::readNodeFile(string("axes.osg"));
+		root0->addChild( axes );
 		root0->getOrCreateStateSet()->setMode( GL_LIGHTING, osg::StateAttribute::OFF | osg::StateAttribute::OVERRIDE );
 
 		//2. add point cloud
@@ -465,6 +482,12 @@ namespace FC {
 				osg::ref_ptr<osg::Image> image;
 				image = osgDB::readImageFile(cItr->cp.photoPath);
 				cItr->photoNode = makeImageFromCamera(cam, image);
+#if SET_IMAGE_AT_NEAR
+				osg::StateSet* ss = cItr->photoNode->getOrCreateStateSet();
+				ss->setRenderBinDetails(-1, "RenderBin");
+				ss->setMode(GL_DEPTH_TEST,osg::StateAttribute::OFF);
+#endif
+
 				char name[1024];
 				sprintf(name, "Photo%i", i);
 				cItr->photoNode->setName(name);

@@ -130,6 +130,7 @@ BEGIN
     BEGIN
         MENUITEM "浏览osg/ive文档\r\n或打开工作流插件(&N)...\tCtrl+N", ID_FILE_NEW
         MENUITEM "附加osg/ive文档至当前文档",            ID_FILE_ADDNEW
+        MENUITEM "打开图像",                        ID_OpenImage
         MENUITEM "打开控制器插件(&O)...\tCtrl+O",      ID_FILE_OPEN
         MENUITEM "关闭(&C)",                      ID_FILE_CLOSE
         MENUITEM "保存为(&S)\tCtrl+S",             ID_FILE_SAVE
@@ -336,6 +337,7 @@ STRINGTABLE
 BEGIN
     IDR_MAINFRAME           "OsgFrameWork"
     IDR_OsgFrameWorkTYPE    "\nOsgFrameWork\nOsgFrameWork\n\n\nOsgFrameWork.Document\nOsgFrameWork.Document"
+    IDR_ImageType           "\nImageView\nImageView\n\n\nImageView.Document\nImageView.Document"
 END
 
 STRINGTABLE 

@@ -42,6 +42,7 @@ namespace FC {
 
 	bool ViewerFramework::AddModel(std::string path, int i)
 	{
+		setlocale(LC_ALL, "chs");
 		osg::Node* model = osgDB::readNodeFile(path);
 		if(model) {
 			m_impl->AddModel(model, i);
