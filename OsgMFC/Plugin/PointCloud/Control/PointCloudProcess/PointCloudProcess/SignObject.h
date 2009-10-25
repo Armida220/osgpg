@@ -38,6 +38,14 @@ public:
 	//高亮某一序号的标记对象，并去掉前一次高亮对象的高亮状态
 	void HighLightSign(unsigned int id);
 
+    //高亮选中的标记对象
+    void HighLightSign(osg::Geode* geom);
+
+    // 删除
+    unsigned int DeleteSign(unsigned int id);
+
+    unsigned int GetSignID(osg::Geode* geom);
+
 protected:
 	//创建场景中的节点,文本中的序号用 GetNumber()表示。
 	osg::Geode* CreateNode(osg::Vec3 pos, unsigned int id);

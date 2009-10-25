@@ -15,4 +15,8 @@ public:
 protected:
 	//for label point
 	unsigned int curID;
+
+    void DeleteSelectedSignObject();
+
+    SignObject* _selectedSignObject;
 };

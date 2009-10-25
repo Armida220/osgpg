@@ -22,4 +22,6 @@ protected:
 public:
 	Controller* ctrl;
 	afx_msg void OnBnClickedButtonDragvertex();
+    afx_msg void OnBnClickedButton1();
+    afx_msg void OnBnClickedButton2();
 };

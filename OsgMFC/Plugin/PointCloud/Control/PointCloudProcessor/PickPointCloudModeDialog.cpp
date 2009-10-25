@@ -39,7 +39,7 @@ END_MESSAGE_MAP()
 
 void PickPointCloudModeDialog::OnBnClickedButtonPickPointcloud()
 {
-	AfxMessageBox("进入选择点云模式！");
+	//AfxMessageBox("进入选择点云模式！");
 	ctrl->SetMode(Controller::PICK_POINT_CLOUD);
 }
 

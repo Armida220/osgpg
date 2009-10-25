@@ -71,7 +71,7 @@ bool DragVertexImpl::drag(const osgGA::GUIEventAdapter& ea,
 						dragger->handle(_pointer, ea, aa);
 						_activeDragger = dragger;
 						return true;
-					}                   
+					}
 				}
 			}
 			return false;//__super::handle(ea,aa);

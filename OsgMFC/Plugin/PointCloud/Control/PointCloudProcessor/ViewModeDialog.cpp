@@ -35,7 +35,7 @@ END_MESSAGE_MAP()
 
 void ViewModeDialog::OnBnClickedButtonView()
 {
-	AfxMessageBox("进入观察模式！");
+	//AfxMessageBox("进入观察模式！");
 	ctrl->SetMode(Controller::VIEW);
 	if(ctrl->GetDragMode()!=Controller::FINISH)
 		ctrl->SetDragMode(Controller::FINISH);

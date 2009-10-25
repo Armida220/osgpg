@@ -53,7 +53,7 @@ END_MESSAGE_MAP()
 
 void PickTriangleModeDialog::OnBnClickedButtonPickTriangle()
 {
-	AfxMessageBox("进入选择三角网模式！");
+	//AfxMessageBox("进入选择三角网模式！");
 	ctrl->SetMode(Controller::PICK_TRIANGLE);
 }
 

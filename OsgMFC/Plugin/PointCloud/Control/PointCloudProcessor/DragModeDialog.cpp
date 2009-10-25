@@ -37,7 +37,7 @@ END_MESSAGE_MAP()
 
 void DragModeDialog::OnBnClickedButtonDrag()
 {
-	AfxMessageBox("进入拖拽模式！");
+	//AfxMessageBox("进入拖拽模式！");
 	ctrl->SetMode(Controller::DRAG);
 	ctrl->SetDragMode(Controller::BEGIN);
 }

@@ -1,9 +1,12 @@
 #include "StdAfx.h"
 #include "TriangleMesh.h"
+#include "ObjectClassCode.h"
+using namespace PointCloudProcess;
 
 TriangleMesh::TriangleMesh(void)
 {
 	triArr.clear();
+    setNodeMask(CLASSCODE::ClassTriangleMesh);
 }
 
 osg::Vec3Array* TriangleMesh::GetVertexArray()

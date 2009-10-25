@@ -56,6 +56,8 @@ public:
 		PICK_POINT_CLOUD,
 		PICK_TRIANGLE,
 		DRAG_VERTEX,
+        DRAGORPICK_EDGE,
+        DRAG_TRIFACE,
 		DRAG
 	};
 

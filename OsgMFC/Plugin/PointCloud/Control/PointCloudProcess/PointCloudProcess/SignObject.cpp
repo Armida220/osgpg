@@ -2,7 +2,9 @@
 #include "SignObject.h"
 #include <osgText/Text>
 #include <sstream>
-
+#include "ObjectClassCode.h"
+#include "Utility.h"
+using namespace PointCloudProcess;
 
 SignObject::SignObject()
 {
@@ -14,6 +16,7 @@ SignObject::SignObject()
 	curID = 0;
 
 	this->getOrCreateStateSet()->setMode(GL_DEPTH_TEST, osg::StateAttribute::OFF);
+    setNodeMask(CLASSCODE::ClassSignObjects);
 }
 
 //TODO 标记对象尺寸问题，应该随屏幕大小变化，而不是固定尺寸
@@ -35,7 +38,9 @@ osg::Geode* SignObject::CreateNode(osg::Vec3 pos, unsigned int id)
 	text->setText(ss.str());
 	text->setFont(timesFont);
 	text->setColor(osg::Vec4(0, 1, 0, 1));
-	text->setCharacterSizeMode(osgText::Text::SCREEN_COORDS);
+	/*text->setCharacterSizeMode(osgText::Text::SCREEN_COORDS);*/
+    text->setCharacterSizeMode(osgText::Text::OBJECT_COORDS_WITH_MAXIMUM_SCREEN_SIZE_CAPPED_BY_FONT_HEIGHT);
+    text->setBackdropType(osgText::Text::OUTLINE);
 	text->setAxisAlignment(osgText::Text::SCREEN);
 
 	// 创建一个用于保存几何信息的对象 
@@ -62,6 +67,8 @@ osg::Geode* SignObject::CreateNode(osg::Vec3 pos, unsigned int id)
 	// 向 Geode 类添加几何体（Drawable）并返回 Geode 
 	geode->addDrawable( geom.get() ); 
 
+    geode->setName("SignObject");
+    geode->setNodeMask(CLASSCODE::ClassSignObject);
 	return geode;
 }
 
@@ -157,9 +164,72 @@ void SignObject::HighLightSign(unsigned int id)
 	}
 }
 
+void SignObject::HighLightSign( osg::Geode* geom )
+{
+    if(!geom) return;
+
+    SignMap::iterator oldItr = m_signMap.find(curID);
+    //去掉当前的高亮
+    if(oldItr!=m_signMap.end()) {
+        SignPair& sp = oldItr->second;
+
+        osg::Geode* geode = sp.first.get();
+        osgText::Text* text = dynamic_cast<osgText::Text*>(
+            geode->getDrawable(0));
+        if(text) {
+            SetTextColor(text, m_commonColor);
+        }
+    }
+
+    osgText::Text* text = dynamic_cast<osgText::Text*>(geom->getDrawable(0));
+    if(text) {
+        SetTextColor(text, m_highLightColor);
+    }
+
+    curID = GetSignID(geom);
+}
+
 void SignObject::SetTextColor(osgText::Text* text, osg::Vec4 c)
 {
 	osg::Vec4 color = text->getColor();
 	text->setColor(c);
 	text->dirtyDisplayList();
+}
+
+unsigned int SignObject::DeleteSign( unsigned int id )
+{
+    SignMap::iterator oldItr = m_signMap.find(curID);
+    //去掉当前的高亮
+    if(oldItr!=m_signMap.end()) 
+    {
+        SignPair& sp = oldItr->second;
+
+        osg::Geode* geode = sp.first.get();
+        Utility::DeleteSelectedNodesVisitor dsn(CLASSCODE::ClassSignObject);
+        geode->accept(dsn);
+        dsn.pruneSelectedNodes();
+        m_signMap.erase(oldItr);
+    }
+
+    return (unsigned int)m_signMap.size();
+}
+
+unsigned int SignObject::GetSignID( osg::Geode* geom )
+{
+    unsigned int retID = 0xFFFFFFFF;
+    
+    if(!geom) return retID;
+
+    SignMap::iterator iter = m_signMap.begin();
+    for (;iter != m_signMap.end();iter++)
+    {
+        SignPair& sp = iter->second;
+        if(geom == sp.first.get())
+        {
+            retID = iter->first;
+            break;
+        }
+    }
+
+    return retID;
 }

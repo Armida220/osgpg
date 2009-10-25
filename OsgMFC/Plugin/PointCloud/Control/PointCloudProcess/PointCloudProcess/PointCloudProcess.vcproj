@@ -41,8 +41,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm125"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(OSGHOME)\include&quot;;..\DLLFiles\DebugDLL"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;POINTCLOUDPROCESS_EXPORTS"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;..\DLLFiles\DebugDLL;&quot;$(SolutionDir)Plugin\PointCloud\LOD\KdTree\kdTreeNodes&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;POINTCLOUDPROCESS_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -62,10 +62,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Points2KdTreeGridsd.lib osgManipulatord.lib osgd.lib osgDBd.lib osgUtild.lib osgTextd.lib OpenThreadsd.lib osgGAd.lib osgViewerd.lib PoissonDLL.lib"
+				AdditionalDependencies="osgManipulatord.lib osgd.lib osgDBd.lib osgUtild.lib osgTextd.lib OpenThreadsd.lib osgGAd.lib osgViewerd.lib PoissonDLL.lib"
 				OutputFile="$(OutDir)\$(ProjectName)d.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\DLLFiles\DebugDLL;&quot;$(OSGHOME)\lib&quot;"
+				AdditionalLibraryDirectories="..\DLLFiles\DebugDLL;&quot;$(OSG_LIB_PATH)&quot;;&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -121,8 +121,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm125"
-				AdditionalIncludeDirectories="&quot;$(OSGHOME)\include&quot;;..\DLLFiles\ReleaseDLL;&quot;$(SolutionDir)Plugin\PointCloud\LOD\KdTree\kdTreeNodes&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;POINTCLOUDPROCESS_EXPORTS"
+				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;..\DLLFiles\ReleaseDLL;&quot;$(SolutionDir)Plugin\PointCloud\LOD\KdTree\kdTreeNodes&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;POINTCLOUDPROCESS_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
@@ -142,7 +142,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="osgManipulator.lib osg.lib osgDB.lib osgUtil.lib osgText.lib OpenThreads.lib osgGA.lib osgViewer.lib PoissonDLL.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(OSGHOME)\lib&quot;;..\DLLFiles\ReleaseDLL;&quot;$(SolutionDir)Plugin\PointCloud\Control\PointCloudProcess\PointCloudProcess&quot;;&quot;$(SolutionDir)release&quot;"
+				AdditionalLibraryDirectories="&quot;$(OSG_LIB_PATH)&quot;;..\DLLFiles\ReleaseDLL;&quot;$(SolutionDir)Plugin\PointCloud\Control\PointCloudProcess\PointCloudProcess&quot;;&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -189,6 +189,10 @@
 			</File>
 			<File
 				RelativePath=".\Controller.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DataCallBack.cpp"
 				>
 			</File>
 			<File
@@ -295,6 +299,10 @@
 				RelativePath=".\TriangleMesh.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Utility.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -307,6 +315,10 @@
 			</File>
 			<File
 				RelativePath=".\Controller.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DataCallBack.h"
 				>
 			</File>
 			<File
@@ -331,6 +343,10 @@
 			</File>
 			<File
 				RelativePath=".\LabelPointImpl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ObjectClassCode.h"
 				>
 			</File>
 			<File
@@ -383,6 +399,10 @@
 			</File>
 			<File
 				RelativePath="..\DLLFiles\ReleaseDLL\TriStruct.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utility.h"
 				>
 			</File>
 		</Filter>

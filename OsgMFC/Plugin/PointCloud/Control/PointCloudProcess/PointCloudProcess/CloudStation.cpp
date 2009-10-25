@@ -2,6 +2,8 @@
 #include "CloudStation.h"
 #include <osg/matrix>
 #include <osg/matrixtransform>
+#include "ObjectClassCode.h"
+using namespace PointCloudProcess;
 
 //////////////////////////////////////////////////////////////////////////
 CloudStation::CloudStation(void)
@@ -11,7 +13,11 @@ CloudStation::CloudStation(void)
 	//so signObj is the first child of m_pointSelection
 	this->m_signObj = new SignObject;
 	this->addChild(m_signObj.get());
+    m_selected = false;
+    m_selectedcolor = osg::Vec4(0,1,1,1);
+    m_color = osg::Vec4(1,1,0,1);
 	//this->setUserData(this->m_signObj.get());
+    setNodeMask(CLASSCODE::ClassCloudStation);
 }
 
 osg::ref_ptr<osg::Vec3Array> CloudStation::GetTransformedPointCloud()
@@ -109,4 +115,19 @@ bool CloudStation::SetColorPerVertex(osg::Vec4Array& colors)
 	}
 
 	return true;
+}
+
+void CloudStation::toggleSelect()
+{
+    m_selected = !m_selected;
+
+    osg::Vec4 color;
+
+    if(m_selected)
+        color = m_selectedcolor;
+    else
+        color = m_color;
+    
+    RemapColorVisitor rcv(color);
+    this->accept(rcv);
 }

@@ -21,6 +21,10 @@ purpose:	扫描站对象
 #include <osgManipulator/TranslateAxisDragger>
 
 #include "SignObject.h"
+#include "DataCallBack.h"
+
+typedef std::pair<unsigned int,osg::ref_ptr<osg::Geometry>> GeometryPrimitiveIndexPair;
+typedef std::vector<GeometryPrimitiveIndexPair> GroupGeometryIndexsV;
 
 class POINTCLOUDPROCESS_API CloudStation : public osgManipulator::Selection
 {
@@ -34,21 +38,43 @@ public:
 	osg::Vec4    GetColor() const { return m_color; }
 	void         SetColor(osg::Vec4 val) { m_color = val; SetColorToCloudStation(); }
 
+    osg::Vec4 Selectedcolor() const { return m_selectedcolor; }//选中的颜色
+    void Selectedcolor(osg::Vec4 val) { m_selectedcolor = val; }
+
 	SignObject* GetSignObject() const { return m_signObj.get(); }
 	void SetSignObject(SignObject* sign) { m_signObj = sign; }
 
 	virtual osg::ref_ptr<osg::Vec3Array> GetTransformedPointCloud();
 	osg::ref_ptr<osg::Vec3Array> GetSignedPoints();
 
+    //切换选中
+    void toggleSelect();
+
 	virtual bool SetColorPerVertex(osg::Vec4Array& colors);
 
+	void SetSignObjectDataCallBack(DataCallBack* signcallback) 
+	{
+		_signObjectDataCallBack = signcallback;
+	}
+	DataCallBack* GetSignObjectDataCallBack(void)
+	{
+		return _signObjectDataCallBack.get();
+	}
 private:
 	osg::ref_ptr<SignObject> m_signObj;
 
 	//点云颜色
 	osg::Vec4 m_color;
 
+    //选中的颜色
+    osg::Vec4 m_selectedcolor;
+    
+    bool m_selected;
+
 	void SetColorToCloudStation();
+
+protected:
+	osg::ref_ptr<DataCallBack> _signObjectDataCallBack;
 };
 
 /*

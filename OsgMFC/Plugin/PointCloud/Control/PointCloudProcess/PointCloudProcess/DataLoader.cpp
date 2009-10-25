@@ -105,7 +105,8 @@ TriangleMesh* TriMeshReadWriter::Read(char* filename, unsigned int fileType)
 			iA->push_back(0);//color idx point to the first color in the color array
 		}
 
-		//galaxy->setUseVertexBufferObjects(true);
+        galaxy->setUseDisplayList(false);
+        galaxy->setUseVertexBufferObjects(true);
 		geode->addDrawable(galaxy);
 		geode->setInitialBound( geode->getBound() );
 

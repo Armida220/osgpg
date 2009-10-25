@@ -5,6 +5,7 @@
 #include "../PointCloudProcess/PointCloudProcess/CloudStation.h"
 #include "../PointCloudProcess/PointCloudProcess/Controller.h"
 #include "../PointCloudProcess/PointCloudProcess/DataLoader.h"
+#include "../PointCloudProcess/PointCloudProcess/Utility.h"
 
 #include "PointCloudProcessor.h"
 #include "PointCloudOpener.h"
@@ -48,11 +49,13 @@ namespace FC {
 
 		osg::Group* root = viewer->getView(0)->getSceneData()->asGroup();
 		root->addChild(ret);
+        osg::Viewport* vport = viewer->getView(0)->getCamera()->getViewport();
+        root->addChild(Utility::createGlobalHud(vport->width(),vport->height()));
 
 		setlocale(LC_ALL, "chs");
 
 		AfxMessageBox("第一步，选择点云/三角网文件，可以打开多个文件，以“取消”结束");
-#ifndef _DEBUG
+//#ifndef _DEBUG
 		AFX_MANAGE_STATE(AfxGetStaticModuleState());
 		PointCloudOpener pcOpener;
 
@@ -70,7 +73,7 @@ namespace FC {
 				ret->addChild(cs2.get());
 			}
 		}
-#endif
+//#endif
 
 		AfxMessageBox("第二步，浏览、操纵点云/三角网");
 	}
@@ -82,7 +85,7 @@ namespace FC {
 
 		AfxMessageBox("创建控制器！");
 
-#ifndef _DEBUG
+//#ifndef _DEBUG
 		AFX_MANAGE_STATE(AfxGetStaticModuleState());
 		setter = new CPropertySheet("点云控制器");
 		
@@ -112,6 +115,6 @@ namespace FC {
 
 		setter->Create();
 		setter->ShowWindow(SW_SHOW);
-#endif
+//#endif
 	}
 }

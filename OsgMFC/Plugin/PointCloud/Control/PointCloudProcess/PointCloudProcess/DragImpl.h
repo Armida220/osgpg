@@ -30,6 +30,7 @@ protected:
 	osgManipulator::Selection* sel;
 };
 
+
 class RotateAndTranslate3DDragger : public osgManipulator::CompositeDragger
 {
 public:
@@ -61,4 +62,35 @@ public:
 protected:
 	osg::ref_ptr<osgManipulator::TrackballDragger> td;
 	osg::ref_ptr<osgManipulator::TranslateAxisDragger> tad;
+};
+
+class CommDragImpl :	public ControlImpl
+{
+public:
+    CommDragImpl(ostream& _log=cout);
+
+    void stop() { disconnect(); }
+
+    //virtual bool undo() { return cmdMgr->undo(); }
+    //virtual bool redo() { return cmdMgr->redo(); }
+
+    bool drag(const osgGA::GUIEventAdapter& ea,
+        osgGA::GUIActionAdapter& aa);
+
+    osg::Group* createdrag(osg::Node* scene);
+
+    osg::Matrix getTransformMatrix() { return _transformmatrix; }
+
+protected:
+    void disconnect();
+
+    osgManipulator::Dragger* _activeDragger;
+    osgManipulator::PointerInfo _pointer;
+    osg::ref_ptr<osgManipulator::TranslateAxisDragger> m_pointsDragger;
+    //osg::ref_ptr<MyCommandManager> cmdMgr;
+    osg::ref_ptr<osgManipulator::CommandManager> cmdMgr;
+    osgManipulator::Selection* sel;
+
+    bool _isconfgureddrag;
+    osg::Matrix _transformmatrix;
 };

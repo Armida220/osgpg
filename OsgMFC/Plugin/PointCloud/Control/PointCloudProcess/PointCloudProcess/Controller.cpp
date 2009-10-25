@@ -5,6 +5,7 @@
 #include "PickTriangleImpl.h"
 #include "DragVertexImpl.h"
 #include "DragImpl.h"
+#include "Utility.h"
 
 Controller::Controller(ostream& _log) : log(_log)
 {
@@ -14,11 +15,31 @@ Controller::Controller(ostream& _log) : log(_log)
 	_ctrlImplList.push_back(new PickPointCloudImpl(_log));
 	_ctrlImplList.push_back(new PickTriangleImpl(_log));
 	_ctrlImplList.push_back(new DragVertexImpl(_log));
+    _ctrlImplList.push_back(new PickTriangleEdgeImpl(_log));
+    _ctrlImplList.push_back(new PickTriangleFaceImpl(_log));
 	_ctrlImplList.push_back(new DragImpl(_log));
 }
 
 bool Controller::handle( const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa )
 {
+    switch(ea.getEventType())
+    {
+    case (osgGA::GUIEventAdapter::RESIZE):
+        {
+            osgViewer::View* viewer =
+                dynamic_cast<osgViewer::View*>( &aa );
+            if (!viewer)
+                return false;
+
+            osg::Viewport* viewport = viewer->getCamera()->getViewport();
+            osg::Camera* hud = Utility::getGlobalHud();
+            if(hud)
+            {
+                hud->setProjectionMatrix(osg::Matrix::ortho2D(0,viewport->width(),0,viewport->height()));
+            }
+        }
+    }
+
 	bool ret;
 	ControlImpl* ci;
 
@@ -42,6 +63,20 @@ bool Controller::handle( const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapt
 			return __super::handle(ea, aa);
 		else
 			return ret;
+    case DRAGORPICK_EDGE:
+        ci = _ctrlImplList[DRAGORPICK_EDGE-1];
+        ret=(*ci)(ea, aa);
+        if(ret==false)
+            return __super::handle(ea, aa);
+        else
+            return ret;
+    case DRAG_TRIFACE:
+        ci = _ctrlImplList[DRAG_TRIFACE-1];
+        ret=(*ci)(ea, aa);
+        if(ret==false)
+            return __super::handle(ea, aa);
+        else
+            return ret;
 	case DRAG:
 		ci = _ctrlImplList[DRAG-1];
 		ret=(*ci)(ea, aa);

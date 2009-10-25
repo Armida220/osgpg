@@ -39,7 +39,7 @@ END_MESSAGE_MAP()
 
 void LablePointModeDialog::OnBnClickedButtonLablePoint()
 {
-	AfxMessageBox("进入标记点模式！");
+	//AfxMessageBox("进入标记点模式！");
 	ctrl->SetMode(Controller::LABEL_POINT);
 }
 

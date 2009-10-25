@@ -61,7 +61,7 @@ bool DragImpl::drag(const osgGA::GUIEventAdapter& ea,
 						dragger->handle(_pointer, ea, aa);
 						_activeDragger = dragger;
 						return true;
-					}                   
+					}
 				}
 			}
 			return false;//__super::handle(ea,aa);
@@ -188,4 +188,134 @@ bool DragImpl::operator()(const osgGA::GUIEventAdapter& ea,
 	}//end of if sel
 
 	return false;//__super::handle(ea,aa);
+}
+//////////////////////////////////////////////////////////////////////////
+CommDragImpl::CommDragImpl( ostream& _log/*=cout*/ ): ControlImpl(_log)
+{
+    this->_activeDragger = 0;
+
+    /*RotateAndTranslate3DDragger* rat3d = new RotateAndTranslate3DDragger;
+    rat3d->setupDefaultGeometry();*/
+    this->m_pointsDragger = new osgManipulator::TranslateAxisDragger();
+    this->m_pointsDragger->setupDefaultGeometry();
+    this->m_pointsDragger->setName("CommDrag");
+    this->m_pointsDragger->setNodeMask(0);//初始关闭dragger
+
+    //this->cmdMgr = new MyCommandManager;
+    this->cmdMgr = new osgManipulator::CommandManager();
+
+    this->sel = 0;
+
+    _isconfgureddrag = false;
+
+    _transformmatrix.makeIdentity();
+}
+
+void CommDragImpl::disconnect()
+{
+    _transformmatrix.makeIdentity();
+    sel = 0;
+    this->cmdMgr->disconnect(*this->m_pointsDragger);
+    this->m_pointsDragger->setMatrix(osg::Matrix::identity());//这一句很关键，否则会出问题
+    this->m_pointsDragger->setNodeMask(0);
+    log<<"Drag disconnect"<<endl;
+
+    _isconfgureddrag = false;
+}
+
+bool CommDragImpl::drag( const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa )
+{
+    if(!_isconfgureddrag) return false;
+
+    osgViewer::View* viewer = dynamic_cast<osgViewer::View*>(&aa);
+    if (!viewer) return false;
+
+    switch (ea.getEventType())
+    {
+    case osgGA::GUIEventAdapter::PUSH:
+        {
+            osgUtil::LineSegmentIntersector::Intersections intersections;
+
+            _pointer.reset();
+
+            if (viewer->computeIntersections(ea.getX(),ea.getY(),intersections))
+            {
+                _pointer.setCamera(viewer->getCamera());
+                _pointer.setMousePosition(ea.getX(), ea.getY());
+
+                for(osgUtil::LineSegmentIntersector::Intersections::iterator hitr = intersections.begin();
+                    hitr != intersections.end();
+                    ++hitr)
+                {
+                    _pointer.addIntersection(hitr->nodePath, hitr->getLocalIntersectPoint());
+                }
+                for (osg::NodePath::iterator itr = _pointer._hitList.front().first.begin();
+                    itr != _pointer._hitList.front().first.end();
+                    ++itr)
+                {
+                    osgManipulator::Dragger* dragger = dynamic_cast<osgManipulator::Dragger*>(*itr);
+                    if (dragger)
+                    {
+                        /*std::cout<<"_activeDragger is "<<dragger << "CommDrag is "<< m_pointsDragger << std::endl;*/
+                        dragger->handle(_pointer, ea, aa);
+                        _activeDragger = dragger;
+                        _transformmatrix.makeIdentity();
+                        return true;
+                    }
+                }
+            }
+            return false;//__super::handle(ea,aa);
+        }
+    case osgGA::GUIEventAdapter::DRAG:
+    case osgGA::GUIEventAdapter::RELEASE:
+        {
+            if (_activeDragger)
+            {
+                _pointer._hitIter = _pointer._hitList.begin();
+                _pointer.setCamera(viewer->getCamera());
+                _pointer.setMousePosition(ea.getX(), ea.getY());
+
+                _activeDragger->handle(_pointer, ea, aa);
+                
+                if (ea.getEventType() == osgGA::GUIEventAdapter::RELEASE)
+                {
+                    _activeDragger = 0;
+                    _pointer.reset();
+                }
+                _transformmatrix = sel->getMatrix();
+                return true;
+            }
+            return false;//__super::handle(ea,aa);
+        }
+    default:
+        return false;//__super::handle(ea,aa);
+    }
+}
+
+osg::Group* CommDragImpl::createdrag(osg::Node* scene)
+{
+    if(_isconfgureddrag) return NULL;
+
+    if(!scene) return NULL;
+
+    sel = new osgManipulator::Selection;
+    sel->addChild(scene);
+
+    osg::Group* root = new osg::Group;
+    root->addChild(m_pointsDragger);
+    root->addChild(sel);
+
+    root->setName("dynamic drag");
+    root->setNodeMask(scene->getNodeMask());
+    
+    this->m_pointsDragger->setNodeMask(1);
+
+    float scale = scene->getBound().radius() * 1.6;
+    m_pointsDragger->setMatrix(osg::Matrix::scale(scale, scale, scale) *
+        osg::Matrix::translate(scene->getBound().center()));
+    cmdMgr->connect(*m_pointsDragger, *sel);
+
+    _isconfgureddrag = true;
+
+    return root;
 }
