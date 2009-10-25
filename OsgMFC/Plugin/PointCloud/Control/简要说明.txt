@@ -1,0 +1,36 @@
+简要说明:
+一、PointCloudProcess类库中主要由点云(CloudStation)，三角网(TriangleMesh),
+和控制器(Controler)三大类构成。
+1、点云类提供的主要接口有：
+    //获取已经过变换后点云的原始数据
+    virtual osg::ref_ptr<osg::Vec3Array> GetTransformedPointCloud();
+	//获取标记在点云的标记点位置
+    osg::ref_ptr<osg::Vec3Array> GetSignedPoints();
+    //设置实时获取标记点数据的回调对象
+    void SetSignObjectDataCallBack(DataCallBack* signcallback);
+	//返回实时获取标记点数据的回调对象
+    DataCallBack* GetSignObjectDataCallBack(void);
+    //变换点云位置
+    void postMult(osg::Matrix postmatrix);
+
+2、三角网继承点云类，扩展的接口有：
+    //设置三角网的纹理对象和纹理坐标
+    bool TriangleMesh::SetTexture(osg::Vec2Array& textureCoords, string textureName)；
+    
+3、控制器类主要通过各个模式的ControlImpl类实现具体功能，现有的模式有：
+    enum Modes
+	{
+		VIEW = 0,           //观察模式
+		LABEL_POINT,        //在点云或三角网上新增、修改、删除(Del键)、交互选中标记点
+		PICK_POINT_CLOUD,   //选中点云或三角网对象并高亮
+		PICK_TRIANGLE,      //选中三角网中的单个三角形
+		DRAG_VERTEX,        //拖拽三角网中单个三角形的顶点
+        DRAGORPICK_EDGE,    //拖拽三角网中单个三角形的一条边(Backspace取消拖拽Enter保存拖拽的结果)
+        DRAG_TRIFACE,       //拖拽三角网中单个三角形，以面的形式拖拽(Backspace取消拖拽Enter保存拖拽的结果)
+		DRAG                //拖拽整个点云或者三角网对象
+	};
+    
+二、如何使用该库
+1、初始化场景窗口。
+2、创建点云或三角网对象并加入到场景数据中，保存点云或三角网对象为在界面交互中使用。
+3、创建控制器对象并加入到整个场景的视图中，这里只需创建Controler类即可。

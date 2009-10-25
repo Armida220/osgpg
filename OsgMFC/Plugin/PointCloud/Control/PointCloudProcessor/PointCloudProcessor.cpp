@@ -38,6 +38,7 @@ namespace FC {
 		SAFE_RELEASE(pickTriangleDlg)
 		SAFE_RELEASE(dragDlg)
 		SAFE_RELEASE(dragVertexDlg)
+		SAFE_RELEASE(imageOpenerDlg)
 
 		delete this;
 	}
@@ -112,6 +113,9 @@ namespace FC {
 		dragVertexDlg = new DragVertexModeDialog;
 		dragVertexDlg->ctrl = ctrl.get();
 		setter->AddPage(dragVertexDlg);
+
+		imageOpenerDlg = new ImageOpener;
+		setter->AddPage(imageOpenerDlg);
 
 		setter->Create();
 		setter->ShowWindow(SW_SHOW);

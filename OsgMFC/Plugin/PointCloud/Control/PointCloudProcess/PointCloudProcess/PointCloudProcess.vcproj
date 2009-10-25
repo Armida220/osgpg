@@ -121,7 +121,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Zm125"
-				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;..\DLLFiles\ReleaseDLL;&quot;$(SolutionDir)Plugin\PointCloud\LOD\KdTree\kdTreeNodes&quot;"
+				AdditionalIncludeDirectories="&quot;$(OSGHOME)\include&quot;;&quot;$(SolutionDir)Plugin\PointCloud\Control\PointCloudProcess\DLLFiles\ReleaseDLL&quot;;&quot;$(SolutionDir)Plugin\PointCloud\LOD\KdTree\kdTreeNodes&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;POINTCLOUDPROCESS_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -142,7 +142,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="osgManipulator.lib osg.lib osgDB.lib osgUtil.lib osgText.lib OpenThreads.lib osgGA.lib osgViewer.lib PoissonDLL.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(OSG_LIB_PATH)&quot;;..\DLLFiles\ReleaseDLL;&quot;$(SolutionDir)Plugin\PointCloud\Control\PointCloudProcess\PointCloudProcess&quot;;&quot;$(OutDir)&quot;"
+				AdditionalLibraryDirectories="&quot;$(OSGHOME)\lib&quot;;&quot;$(SolutionDir)Plugin\PointCloud\Control\PointCloudProcess\DLLFiles\ReleaseDLL&quot;;&quot;$(SolutionDir)Plugin\PointCloud\Control\PointCloudProcess\PointCloudProcess&quot;;&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

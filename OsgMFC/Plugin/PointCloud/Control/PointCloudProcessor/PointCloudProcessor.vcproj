@@ -122,7 +122,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="&quot;$(OSG_INCLUDE_PATH)&quot;;&quot;$(SolutionDir)OsgFrameWork&quot;;&quot;$(SolutionDir)Plugin\ViewerFrameworkImpl&quot;"
+				AdditionalIncludeDirectories="&quot;$(OSGHOME)\include&quot;;&quot;$(SolutionDir)OsgFrameWork&quot;;&quot;$(SolutionDir)Plugin\ViewerFrameworkImpl&quot;;&quot;$(CXIMAGE_HOME)\cximage&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;POINTCLOUDPROCESSOR_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -141,10 +141,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ViewerFrameworkImpl.lib PointCloudProcess.lib osgManipulator.lib OpenThreads.lib osg.lib osgDB.lib osgGA.lib osgUtil.lib osgViewer.lib"
+				AdditionalDependencies="$(CXIMAGE_HOME)/png/Release/png.lib $(CXIMAGE_HOME)/jpeg/Release/jpeg.lib $(CXIMAGE_HOME)/zlib/Release/zlib.lib $(CXIMAGE_HOME)/tiff/Release/tiff.lib $(CXIMAGE_HOME)/j2k/Release/j2k.lib $(CXIMAGE_HOME)/jbig/Release/jbig.lib $(CXIMAGE_HOME)/jasper/Release/jasper.lib $(CXIMAGE_HOME)/cximage/Release/cximage.lib ViewerFrameworkImpl.lib PointCloudProcess.lib osgManipulator.lib OpenThreads.lib osg.lib osgDB.lib osgGA.lib osgUtil.lib osgViewer.lib"
 				OutputFile="$(OutDir)\$(ProjectName).plugin"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(OSG_LIB_PATH)&quot;;&quot;$(OutDir)&quot;"
+				AdditionalLibraryDirectories="&quot;$(OSGHOME)\lib&quot;;&quot;$(OutDir)&quot;;&quot;$(CXIMAGE_HOME)\lib\release&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -191,6 +191,14 @@
 			</File>
 			<File
 				RelativePath=".\DragVertexModeDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ImageOpener.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ImgMeasurementDlg.cpp"
 				>
 			</File>
 			<File
@@ -249,6 +257,14 @@
 			</File>
 			<File
 				RelativePath=".\DragVertexModeDialog.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ImageOpener.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ImgMeasurementDlg.h"
 				>
 			</File>
 			<File

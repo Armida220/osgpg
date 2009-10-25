@@ -10,6 +10,8 @@
 #define IDD_DIALOG_PICK_TRIANGLE        106
 #define IDD_DIALOG_DRAG                 107
 #define IDD_DIALOG_DRAGVERTEX           108
+#define IDD_DIALOG_IMAGEOPENER          109
+#define IDD_IMGMEASUREMENT_DIALOG       110
 #define IDC_RADIO_POINTCLOUD_NONE       1001
 #define IDC_RADIO_POINTCLOUD_RAW        1002
 #define IDC_RADIO_POINTCLOUD_KD         1003
@@ -46,14 +48,15 @@
 #define IDC_EDIT_TRIANGLE_AREA          1038
 #define IDC_BUTTON2                     1039
 #define IDC_BUTTON_GETSIGNEDPOINTS      1039
+#define IDC_BUTTON_OUT                  1040
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        109
+#define _APS_NEXT_RESOURCE_VALUE        111
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1040
+#define _APS_NEXT_CONTROL_VALUE         1041
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

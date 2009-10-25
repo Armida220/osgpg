@@ -17,6 +17,7 @@
 #include "PickPointCloudModeDialog.h"
 #include "PickTriangleModeDialog.h"
 #include "ViewModeDialog.h"
+#include "ImageOpener.h"
 #include <osgGA/GUIEventHandler>
 using namespace std;
 
@@ -33,6 +34,7 @@ namespace FC {
 		PickTriangleModeDialog* pickTriangleDlg;
 		DragModeDialog* dragDlg;
 		DragVertexModeDialog* dragVertexDlg;
+		ImageOpener* imageOpenerDlg;
 	public:
 		virtual void SetSceneData(osgViewer::CompositeViewer* viewer);
 		virtual void SetGUIEventHandlers(osgViewer::CompositeViewer* viewer);
